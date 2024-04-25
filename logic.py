@@ -18,8 +18,7 @@ class AP_Setup():
         self.ethernetname = ethernetname
         self.wifiname =  wifiname
         self.ini_file =  ini_file
-        
-        #    ap_name = 
+
         ip = [10,10,10,100]
         range_from = [10,10,10,100]
         range_to = [10,10,10,255]
@@ -50,6 +49,7 @@ class AP_Setup():
         # Create an boolean that is true, and run it through tests
         # if any test fail, set the variable to False
         ini_verified = True
+        ini_type = None
         print("\x1b[34m[?]\x1b[0m .ini file used  : "+ self.ini_file)
         # See if file exist
         ini_verified = configurations.ini_exist(self.ini_file, self.verbose)
@@ -67,17 +67,57 @@ class AP_Setup():
                 ini_verified = False
 
         # Evaluate the settings
+        # Is the settings enough to create an AP?
+        if ini_verified:
+            ini_type = configurations.evaluate_ini_settings(settings, self.verbose)
+            if ini_type == None:
+                ini_verified = False
+
+        # Populate the required settings
+        if ini_verified:
+            tmp = configurations.ini_populate(settings, ini_type, self.verbose)
+            settings = tmp
+
+        # Time to implement
+            self.use_ini_file(settings)
+        else:
+            # Something went wrong with the .ini file
+            return False
 
 
-    def use_ini_files(self):
+
+
+    def use_ini_file(self, settings = {}):
         '''
         Purpose:
-            See if an ini_file has been supplied and can be
-            used.
+            By this point, everything related to the .ini
+            file should have been verified.
+            - All packages are installed
+            - AP ready to be setup
+            Time to implement it.
+            There are separate aspects to implement
+            unrelated to another
+            - Reset AP settings
+            - mac_address
+            - dnsmasq.conf file for the dhcp server
+            - hostapd.conf file for hostapd
+        Note:
+            Persistence will not be addressed here
         Return:
-            None if the file does not exist or cannot be used
-        '''
 
+        '''
+        
+        # Updating mac_address
+        # Easy to do
+        if configurations.change_mac(self.wifiname, settings['mac_address']):
+            # mac change was successfull
+            pass
+        else:
+            # mac change was unsuccessfull
+            pass
+        
+        # Look at settings related to the
+        # dnsmasq.conf file (dhcp server) first.
 
         # check if file argument is supplied
         if not self.ini_file_path:
@@ -90,4 +130,7 @@ class AP_Setup():
         config_settings = configurations.read_ini_config(self.ini_file_path, self.verbose)
         if not config_settings:
             print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mEdge case\x1b[0m       : No Wireless Interface located")
+
+
+
 

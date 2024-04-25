@@ -2,6 +2,8 @@ import subprocess
 import configparser
 import os
 import re
+import random
+import ipaddress
 
 '''
 Helper functions needed by logic.py
@@ -23,6 +25,7 @@ def is_valid_mac_address(mac):
     """, re.VERBOSE)
     
     return pattern.match(mac) is not None    
+
 
 def change_mac(interface, new_mac):
     '''
@@ -70,13 +73,13 @@ def read_ini_config(file_path, verbose):
 
     '''
     settings = {
-        'ssid': None,
-        'mac_address': None,
-        'encryption': None,
-        'password': None,
-        'range_from': "10.10.10.100",
-        'range_to': "10.10.10.255",
-        'channel': 1
+        'ssid': None,           # str
+        'mac_address': None,    # str
+        'encryption': None,     # str
+        'password': None,       # str
+        'range_from': None,     # str
+        'range_to': None,       # str
+        'channel': None         # str
     }
     
     config = configparser.ConfigParser()
@@ -103,15 +106,152 @@ def read_ini_config(file_path, verbose):
         settings = None
     return settings
 
-def evaluate_ini_settings(settings = {}):
-    # Need to evaluate using the security aspect
 
-    if settings["security"].lower == "none":
-        pass
-    elif settings["security"].lower == "wpa2":
-        pass
+
+def evaluate_ini_settings(settings = {}, verbose = False):
+    '''
+    Purpose:
+        Review which type of AP is chosen
+        and if the settings are sufficient to
+        support an AP.
+        Each type of AP have some required and
+        optional settings based on the security.
+    '''
+    variable = settings.get('encryption', None)
+    # Need to evaluate using the security aspect
+    if variable == None:
+        return None
+    if variable.lower == "none":
+        '''
+        Required: 
+            - encryption : none
+        Optional:
+            - ssid
+            - mac_address
+            - password
+            - range_from
+            - range_to
+            - channel
+        '''
+        return 'none'
+    elif variable.lower == "wpa2":
+        '''
+        Required: 
+            - encryption : wpa2
+            - password
+        Optional:
+            - ssid
+            - mac_address
+            - range_from
+            - range_to
+            - channel
+        '''
+        if settings.get('password', None) != None:
+            return 'wpa2'
+        elif verbose:
+            print(" "*22+"WPA2 has been chosen in the .ini file,")
+            print(" "*22+"but a password was not supplied.")
+            print(" "*22+"Therefore the .ini file is \x1b[5;34;41mREJECTED\x1b[0m")
+    return None
+
+
+def ini_populate(settings = {}, ini_type = None, verbose = False):
+    '''
+    Purpose
+        Insert default values, depending on
+        the chosen AP type.
+        While at it, verify the values as well.
+    Details:
+        Need to populate:
+        ssid           : str (random from p_names.txt)
+        range_from     : str 
+        range_to       : str 
+        channel        : str
+    Optional:
+        mac_address    : str
+    Return:
+        New settings dictionary
+    '''
+    # Review ssid
+    if settings['ssid'] == None:
+        # Pick a random AP name
+        ap_name_file = 'ap_names.txt'
+        selected_line = None
+        try:
+            with open(ap_name_file, 'r') as file:
+                for index, line in enumerate(file):
+                    # With a probability of 1/(index+1), replace the previous line with the current line
+                    if random.randint(0, index) == 0:
+                        selected_line = line.strip()
+        except FileNotFoundError:
+            settings['ssid'] = 'MyTeacherIsADummy'
+            if verbose:
+                print(f"Error: The file {ap_name_file} does not exist.")
+        except Exception as e:
+            settings['ssid'] = 'MyTeacherIsADummy'
+            print(f"An error occurred reading file {ap_name_file}:\n{e}")
+    
+    # Review channel
+    if settings['channel'] == None:
+        settings['channel'] = '1'
     else:
-        pass
+        '''
+        Verify if the supplied argument can be parsed as an integer
+        and that the integer is valid
+        '''
+        try:
+            channel = int(settings['channel'])
+            available = list(range(1, 11))
+            available.extend(range(34, 65, 4))
+#            available.extend(range(100, 145, 4))
+#            available.extend(range(149, 166, 4))
+            if not channel in set:
+                settings['channel'] = '1'
+            else:
+                # Channel set correctly, nothing to do
+                # other than letting you (the reader) know
+                pass
+        except:
+            '''
+            Channel set incorrectly
+            '''
+            settings['channel'] = '1'
+
+    # Review mac address
+    if settings['mac_address'] != None:
+        if not is_valid_mac_address(settings['mac_address']):
+            settings['mac_address'] = None
+            if verbose:
+                print(" "*22+"The supplied mac address from the .ini file")
+                print(" "*22+"is not valid, and therefore ignored")
+
+    # Review ranges, to and from.
+    acceptable_range = True
+    if settings['range_from'] != None and settings['range_to'] != None:
+        try:
+            ip_from = ipaddress.IPv4Address(settings['range_from'])
+            ip_to = ipaddress.IPv4Address(settings['range_to'])
+            if ip_from.packed[:3] != ip_to.packed[:3]:
+                acceptable_range = False
+                # Not the same /24 subnet (i.e. the first 3 octets are different)
+            else:
+                if max(int(ip_from) - int(ip_to)+1) > 5:
+                    # Sufficient range space, do nothing, other than notify
+                    # you the reader
+                    pass
+                else:
+                    acceptable_range = False
+        except:
+            acceptable_range = False
+    else:
+        acceptable_range = False
+    if acceptable_range == False:
+        settings['range_from'] = '10.10.10.100'
+        settings['range_to'] = '10.10.10.255'
+    
+    return settings
+
+
 
 
 def isolation_status(files = []):
@@ -188,7 +328,7 @@ if __name__ == "__main__":
     # mac_addresses = ["1A:2B:3C:4D:5E:6F", "1G:2H:3I:4J:5K:6L", "00:1A:2B:3C:4D:5E", "derp"]
     # for mac in mac_addresses:
     #    print(f"{mac}: {is_valid_mac_address(mac)}")
-    test = ["Configuration_files/default.ini", "Configuration_files/extended.ini", "Configuration_files/standard1.ini", "Configuration_files/standard2.ini"]
+    test = ["Configuration_files/default.ini", "Configuration_files/extended.ini", "Configuration_files/standard1.ini", "Configuration_files/standard2.ini", "Configuration_files/minimal1.ini"]
     for file in test:
         config_settings = read_ini_config(file, False)
 
@@ -203,10 +343,14 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
+############# supported .ini settings
+# 'ssid'          : str 
+# 'mac_address'   : str 
+# 'encryption'    : str 
+# 'password'      : str 
+# 'range_from'    : str 
+# 'range_to'      : str 
+# 'channel'       : str 
 
 
 
@@ -255,5 +399,3 @@ domain-needed
 bogus-priv
 dhcp-range=[IP_FROM],[IP_TO],12h
 '''
-
-

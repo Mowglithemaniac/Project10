@@ -1,3 +1,5 @@
+import subprocess
+
 '''
 Purpose:
     Provides relevant information for the user
@@ -90,7 +92,6 @@ def project_status(
     '''
     pass
 
-import subprocess
 
 def get_service_status(service_names):
     statuses = {}
