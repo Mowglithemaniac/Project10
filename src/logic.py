@@ -19,10 +19,7 @@ class AP_Setup():
         self.wifiname =  wifiname
         self.ini_file =  ini_file
 
-        ip = [10,10,10,100]
-        range_from = [10,10,10,100]
-        range_to = [10,10,10,255]
-
+        self.ap_type = None
 
     def logic_skeleton(self):
         '''
@@ -144,6 +141,12 @@ class AP_Setup():
         config_settings = configurations.read_ini_config(self.ini_file_path, self.verbose)
         if not config_settings:
             print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mEdge case\x1b[0m       : No Wireless Interface located")
+            return None
+
+        self.ap_type = configurations.determine_ini_ap_type(config_settings)
+        if self.ap_type == None:
+            print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mEdge case\x1b[0m       : No Wireless Interface located")
+            return None
 
 
 

@@ -8,20 +8,20 @@ import ipaddress
 '''
 Helper functions needed by logic.py
 ######### 
-- is_valid_mac_address(mac)
++ is_valid_mac_address(mac)
 - change_mac(interface, new_mac)
 #########ini file
-- ini_exist(file_path="", verbose = False)
-- ini_default_settings(verbose = False)
-- read_ini_config(file_path, verbose)
-- determine_ini_ap_type(settings = {}, verbose = False)
-- ini_populate(settings = {}, ini_type = None, verbose = False)
++ ini_exist(file_path="", verbose = False)
++ ini_default_settings(verbose = False)
++ read_ini_config(file_path, verbose)
++ determine_ini_ap_type(settings = {}, verbose = False)
++ ini_populate(settings = {}, ini_type = None, verbose = False)
 #########Isolation
 - create_isolation()
 - remove_isolation()
 ######### Persistence
 - persistence_status(files = [])
-+ persistence_create()
+- persistence_create(wifiname = [], verbose = False)
 + persistence_remove()
 ######### Update AP
 def update_ap()
@@ -127,10 +127,10 @@ def ini_default_settings(verbose = False):
 
 
 def read_ini_config(file_path, verbose):
-    # Initialize default values or None for each setting
     '''
     Purpose:
        Read the settings from a .ini file.
+       Initialize default values or None for each setting
     Return:
 
     '''
@@ -141,14 +141,16 @@ def read_ini_config(file_path, verbose):
         'password': None,       # str
         'range_from': None,     # str
         'range_to': None,       # str
-        'channel': None         # str
+        'channel': None,        # str
+        'persistence': None     # 'yes'/'no'
+
     }
     
     config = configparser.ConfigParser()
     
     # Safely attempt to read the configuration file
     try:
-        with open(file_path, 'r') as f:
+        with open(file_path, 'r') as f: 
             config.read_file(f)
     except configparser.Error as e:
         print(" "*22+f"Warning: Failed to read the config file: {str(e)}")
@@ -310,11 +312,6 @@ def create_isolation(ethernetnames = [], verbose = False):
     Purpose:
         Create isolation on the machine.
         Execute some commands
-        
-        - sudo airmon-ng check
-        parse output, grab the interfering services
-        store them in a file
-        then use
         - sudo airmon-ng check kill
         Then active a firewall by blocking all traffic
         on ALL ethernet devices
@@ -367,7 +364,7 @@ def persistence_status(files = []):
     return status, missing_files
 
 
-def persistence_create(ethernetdevices = [], verbose = False):
+def persistence_create(wifiname = [], verbose = False):
     '''
     Purpose:
         Creating persistence on the machine
@@ -375,7 +372,7 @@ def persistence_create(ethernetdevices = [], verbose = False):
         - /root/firewall.sh
         - /root/create_ap.sh
         - /etc/cron.d/ap_persistence
-        Maybe update
+        Updating these are the responsibilites of other functions
         - hostapd.con
         - dnsmasq.conf
 
@@ -407,23 +404,27 @@ def persistence_create(ethernetdevices = [], verbose = False):
             file.write("#!/bin/sh\n\n")
             file.write("# Flush all rules on all chains, essentially resetting the firewall\n")
             file.write("iptables -F\n\n")
-
-            for interface in ethernetdevices:
-                file.write(f"# Block all traffic on {interface}\n")
-                file.write(f"iptables -A INPUT -i {interface} -j DROP\n")
-                file.write(f"iptables -A OUTPUT -i {interface} -j DROP\n")
-                file.write(f"iptables -A FORWARD -i {interface} -j DROP\n")
-                file.write(f"iptables -A INPUT -o {interface} -j DROP\n")
-                file.write(f"iptables -A OUTPUT -o {interface} -j DROP\n")
-                file.write(f"iptables -A FORWARD -o {interface} -j DROP\n")
-                file.write("\n")
+            
+            file.write("# Setting default policies to DROP\n\n")
+            file.write(f"iptables -P INPUT DROP\n")
+            file.write(f"iptables -P OUTPUT DROP\n")
+            file.write(f"iptables -P FORWARD DROP\n\n")
+            
+            file.write(f"# Only allow traffic on {wifiname}\n")
+            file.write(f"iptables -A INPUT -i {wifiname} -j ACCEPT\n")
+            file.write(f"iptables -A OUTPUT -i {wifiname} -j ACCEPT\n")
+            file.write(f"iptables -A FORWARD -i {wifiname} -j ACCEPT\n")
+            file.write(f"iptables -A INPUT -o {wifiname} -j ACCEPT\n")
+            file.write(f"iptables -A OUTPUT -o {wifiname} -j ACCEPT\n")
+            file.write(f"iptables -A FORWARD -o {wifiname} -j ACCEPT\n")
+            file.write("\n")
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}: {str(e)}")
         return False
 
     #step 1a Change file metadata (permissions and attributes)
-    os.chmod(filename, 0o700)  # Make the script executable by the owner only
+    os.chmod(filename, 0o500)  # Make the script executable by the owner only
     try:
         subprocess.run(['chattr', '+i', filename], check=True)  # Make the file immutable
     except subprocess.CalledProcessError as e:
@@ -448,18 +449,19 @@ def persistence_create(ethernetdevices = [], verbose = False):
     try:
         #This will create the file
         with open(filename, 'w') as file:
-            file.write("sudo airmon-ng check kill")
-            file.write("sudo systemctl unmask hostapd")
-            file.write("sudo systemctl unmask dnsmasq")
-            file.write("sudo systemctl restart hostapd")
-            file.write("sudo systemctl restart dnsmasq")
+            file.write("sudo airmon-ng check kill\n")
+            file.write("sudo systemctl unmask hostapd\n")
+            file.write("sudo systemctl unmask dnsmasq\n")
+            file.write("sudo systemctl restart hostapd\n")
+            file.write("sudo systemctl restart dnsmasq\n")
+################ IF MAC SETTING, REMEMBER TO UP INCLUDE IT HERE
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}:\n    {str(e)}")
         return False
 
     #step 1b Change file metadata (permissions and attributes)
-    os.chmod(filename, 0o700)  # Make the script executable by the owner only
+    os.chmod(filename, 0o500)  # Make the script executable by the owner only
     try:
         subprocess.run(['chattr', '+i', filename], check=True)  # Make the file immutable
     except subprocess.CalledProcessError as e:
@@ -483,20 +485,20 @@ def persistence_create(ethernetdevices = [], verbose = False):
     try:
         #This will create the file
         with open(filename, 'w') as file:
-            file.write("## Settings for persistence, may require a full PATH")
-            file.write("## And SHELL, like this:")
-            file.write("# SHELL=/bin/sh")
-            file.write("## Grap your current PATH and insert it")
-            file.write("# PATH=...\n")
-            file.write("@reboot root /bin/sh /root/firewall.sh")
-            file.write("@reboot root /bin/sh /root/reset_ap.sh")
+            file.write("## Settings for persistence, may require a full PATH\n")
+            file.write("## And SHELL, like this:\n")
+            file.write("# SHELL=/bin/sh\n")
+            file.write("## Grap your current PATH and insert it\n")
+            file.write("# PATH=...\n\n")
+            file.write("@reboot root /bin/sh /root/firewall.sh\n")
+            file.write("@reboot root /bin/sh /root/reset_ap.sh\n")
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}: {str(e)}")
         return False
 
     #step 1c Change file metadata (permissions and attributes)
-    os.chmod(filename, 0o700)  # Make the script executable by the owner only
+    os.chmod(filename, 0o500)  # Make the script executable by the owner only
     try:
         subprocess.run(['chattr', '+i', filename], check=True)  # Make the file immutable
     except subprocess.CalledProcessError as e:
