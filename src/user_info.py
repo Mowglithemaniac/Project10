@@ -127,7 +127,7 @@ def review_isolation_status(persistence_achieved = None, files =[], verbose = Fa
         if persistence_achieved:
             print("Files are located at:")
         else:
-            print("These files will be created:")
+            print("If persistence is desired, these files will be created")
         for file in files:
             print(" "*20+"- '"+file+"'")
 

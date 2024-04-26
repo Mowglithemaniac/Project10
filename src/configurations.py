@@ -21,8 +21,8 @@ Helper functions needed by logic.py
 - remove_isolation()
 ######### Persistence
 - persistence_status(files = [])
-- persistence_create()
-- persistence_remove()
++ persistence_create()
++ persistence_remove()
 ######### Update AP
 def update_ap()
 '''
@@ -338,8 +338,9 @@ def persistence_status(files = []):
     '''
     Purpose:
         Check whether the files related to isolation exist
-        - /var/spool/cron/crontabs/root
-        - /root/isolation.sh
+        - /root/firewall.sh
+        - /root/create_ap.sh
+        - /etc/cron.d/ap_persistence
     Assumption:
         If the files exist, that the content is correct.
     Return:
@@ -372,8 +373,8 @@ def persistence_create(ethernetdevices = [], verbose = False):
         Creating persistence on the machine
         File(s) to create
         - /root/firewall.sh
+        - /root/create_ap.sh
         - /etc/cron.d/ap_persistence
-        - /root/reset_ap.sh
         Maybe update
         - hostapd.con
         - dnsmasq.conf
@@ -407,7 +408,7 @@ def persistence_create(ethernetdevices = [], verbose = False):
             file.write("# Flush all rules on all chains, essentially resetting the firewall\n")
             file.write("iptables -F\n\n")
 
-            for interface in ethernetnames:
+            for interface in ethernetdevices:
                 file.write(f"# Block all traffic on {interface}\n")
                 file.write(f"iptables -A INPUT -i {interface} -j DROP\n")
                 file.write(f"iptables -A OUTPUT -i {interface} -j DROP\n")
@@ -431,7 +432,42 @@ def persistence_create(ethernetdevices = [], verbose = False):
         return False
 
 
-    # Step 1b, /etc/cron.d/ap_persistence
+    # Step 1b, /root/reset_ap.sh
+    ## If file exist, delete it
+    filename = '/root/create_ap.sh'
+    if os.path.exists(filename):
+        try:
+            subprocess.run(['chattr', '-i', filename], check=True)
+        except subprocess.CalledProcessError as e:
+            if verbose:
+                print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
+            return False
+
+        os.remove(filename)  # Delete the file
+    # Attempt to open the file to write
+    try:
+        #This will create the file
+        with open(filename, 'w') as file:
+            file.write("sudo airmon-ng check kill")
+            file.write("sudo systemctl unmask hostapd")
+            file.write("sudo systemctl unmask dnsmasq")
+            file.write("sudo systemctl restart hostapd")
+            file.write("sudo systemctl restart dnsmasq")
+    except IOError as e:
+        if verbose:
+            print(f"    Failed to write to {filename}:\n    {str(e)}")
+        return False
+
+    #step 1b Change file metadata (permissions and attributes)
+    os.chmod(filename, 0o700)  # Make the script executable by the owner only
+    try:
+        subprocess.run(['chattr', '+i', filename], check=True)  # Make the file immutable
+    except subprocess.CalledProcessError as e:
+        if verbose:
+            print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
+        return False
+
+    # Step 1c, /etc/cron.d/ap_persistence
     ## If file exist, delete it
     filename = '/etc/cron.d/ap_persistence'
     if os.path.exists(filename):
@@ -443,29 +479,23 @@ def persistence_create(ethernetdevices = [], verbose = False):
             return False
 
         os.remove(filename)  # Delete the file
-        # Attempt to open the file to write
+    # Attempt to open the file to write
     try:
         #This will create the file
         with open(filename, 'w') as file:
-            file.write("#!/bin/sh\n\n")
-            file.write("# Flush all rules on all chains, essentially resetting the firewall\n")
-            file.write("iptables -F\n\n")
-
-            for interface in ethernetnames:
-                file.write(f"# Block all traffic on {interface}\n")
-                file.write(f"iptables -A INPUT -i {interface} -j DROP\n")
-                file.write(f"iptables -A OUTPUT -i {interface} -j DROP\n")
-                file.write(f"iptables -A FORWARD -i {interface} -j DROP\n")
-                file.write(f"iptables -A INPUT -o {interface} -j DROP\n")
-                file.write(f"iptables -A OUTPUT -o {interface} -j DROP\n")
-                file.write(f"iptables -A FORWARD -o {interface} -j DROP\n")
-                file.write("\n")
+            file.write("## Settings for persistence, may require a full PATH")
+            file.write("## And SHELL, like this:")
+            file.write("# SHELL=/bin/sh")
+            file.write("## Grap your current PATH and insert it")
+            file.write("# PATH=...\n")
+            file.write("@reboot root /bin/sh /root/firewall.sh")
+            file.write("@reboot root /bin/sh /root/reset_ap.sh")
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}: {str(e)}")
         return False
 
-    #step 1a Change file metadata (permissions and attributes)
+    #step 1c Change file metadata (permissions and attributes)
     os.chmod(filename, 0o700)  # Make the script executable by the owner only
     try:
         subprocess.run(['chattr', '+i', filename], check=True)  # Make the file immutable
@@ -474,19 +504,33 @@ def persistence_create(ethernetdevices = [], verbose = False):
             print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
         return False
 
-
-
-
-    # Step 1c, /root/reset_ap.sh
-
-
     return True
 
 
 
-def persistence_remove():
-    pass
+def persistence_remove(verbose = False):
+    '''
+    Purpose:
+        Deletes the files used to enforce persistence on reboot.
+    Return:
+        True if success
+        False if failure
+    '''
 
+    persistence_files = ['/root/firewall.sh', '/root/create_ap.sh', '/etc/cron.d/ap_persistence']
+
+    for filename in persistence_files:
+        if os.path.exists(filename):
+            try:
+                subprocess.run(['chattr', '-i', filename], check=True)
+            except subprocess.CalledProcessError as e:
+                if verbose:
+                    print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
+                return False
+            os.remove(filename)  # Delete the file
+        else:
+            print(""*4+f"'{filename}' does not exist and can therefore not be removed")
+    return True
 
 ######### 
 

@@ -31,7 +31,7 @@ if __name__ == "__main__":
     terminate = 0
     missing_packages = []
     internet_status = False
-    isolation_files = ['/var/spool/cron/crontabs/root', '/root/isolation.sh']
+    persistence_files = ['/root/firewall.sh', '/root/create_ap.sh', '/etc/cron.d/ap_persistence']
 
     '''
     Default settings
@@ -74,7 +74,7 @@ if __name__ == "__main__":
         if preparations.internet_status(interface, verbose):
             if not internet_status:
                 internet_status = True
-    persistence_achieved, _  = preparations.isolation_status(isolation_files, verbose)
+    persistence_achieved, _  = preparations.persistance_status(persistence_files, verbose)
 
 ####################################
     print(25*"=")
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     '''
     user_info.review_model(model)
     user_info.review_date(fixed_date, verbose)
-    user_info.review_isolation_status(persistence_achieved, isolation_files, verbose)
+    user_info.review_isolation_status(persistence_achieved, persistence_files, verbose)
     terminate += user_info.review_requirements(missing_packages)
     
     if terminate > 0:

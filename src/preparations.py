@@ -89,9 +89,9 @@ def check_date(test = 0):
     outcome = len(result1) + len(result2)
 
     if outcome > 0: 
-        print("\x1b[32m[+]\x1b[0m Date review       : Seems updated")                                    
+        print("\x1b[32m[+]\x1b[0m Date review     : Seems updated")                                    
     else: # Model string is missing or empty
-        print("\x1b[31m[!]\x1b[0m Date review       : Not updated")
+        print("\x1b[31m[!]\x1b[0m Date review     : Not updated")
 
     return outcome
 
@@ -262,11 +262,11 @@ def internet_status(interface, verbose = False):
             print("\x1b[34m[?]\x1b[0m Checking access : "+ interface)
         if result.returncode == 0:
             if verbose:
-                print(f"                      Successfully accessed {url} via {interface}.")
+                print(" "*22+f"Successfully accessed {url} via {interface}.")
             status = True
         else:
             if verbose:
-                print(f"                      Failed to access {url} via {interface}: {result.stderr}")
+                print(" "*22+f"Failed to access {url} via {interface}: {result.stderr}")
             status = False
     except Exception as e:
         print("\x1b[31m[!]\x1b[0m Checking access : "+ interface)
@@ -280,7 +280,7 @@ def internet_status(interface, verbose = False):
 # all traffic through the ethernet device
 
 
-def isolation_status(files=[], verbose = False):
+def persistance_status(files=[], verbose = False):
     '''
     Purpose:
         Check whether the files related to isolation exist
@@ -291,12 +291,12 @@ def isolation_status(files=[], verbose = False):
     '''
     # status = Boolean
     missing_files = []
-    status, missing_files = configurations.isolation_status(files)
+    status, missing_files = configurations.persistence_status(files)
     print("\x1b[33m[?]\x1b[0m Persistence     : ", end='')
     if status:
         print("Files in place")
     else:
-        print("Not prepared")
+        print("Not in place")
 
     # Cannot think of how to use the missing_files list.
     return status, missing_files
