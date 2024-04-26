@@ -139,12 +139,12 @@ def installed_prerequisites(location='requirements.txt'):
                     print("                      Packages should be placed on separate lines.")
                     print("                      \x1b[41mTerminating the program\x1b[0m")
                     exit(1)
-                if package_name.find(';') != -1 or package_name.find('/') != -1:
+                if package_name.find(';') != -1 or package_name.find('/') != -1 or package_name.find('&') != -1 or package_name.find('|') != -1:
                     ''' Vulnerability prevention'''
                     print("\x1b[41mSeriously....\x1b[0m")
                     exit(2)
                 try:
-                    # Execute the rpm command and suppress error messages
+                    # Execute the dpkg command and suppress error messages
                     result = subprocess.run(['dpkg', '-s', package_name], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 except Exception as e:
                     print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mCritical Error\x1b[0m  : ", e)

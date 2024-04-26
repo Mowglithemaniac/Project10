@@ -26,9 +26,13 @@ class AP_Setup():
 
     def logic_skeleton(self):
         '''
-        Look at isolation status
+        Purpose:
+            Acts as a skeleton, for the logic
+            tying it together, and deciding
+            upon what to implement and how        
         '''
-        
+
+        changes_made = False
 
 
         '''
@@ -36,8 +40,13 @@ class AP_Setup():
         let's see if it is working and can be used
         '''
         if len(self.ini_file) > 0:
-            self.ini_choice()
+            changes_made = self.ini_choice()
+        if changes_made:
+            changes_made = False
+            print()
 
+#        while True:
+#            pass
 
 
     def ini_choice(self):
@@ -45,6 +54,9 @@ class AP_Setup():
         Purpose:
             Review the .ini file status 
         Return:
+            True if changes requiring the restart/setup
+                 of hostapd/dnsmasq were made
+            False if no changes where made
         '''
         # Create an boolean that is true, and run it through tests
         # if any test fail, set the variable to False
@@ -67,7 +79,7 @@ class AP_Setup():
                 ini_verified = False
 
         # Evaluate the settings
-        # Is the settings enough to create an AP?
+        # Are the settings enough to create an AP?
         if ini_verified:
             ini_type = configurations.evaluate_ini_settings(settings, self.verbose)
             if ini_type == None:
@@ -79,7 +91,8 @@ class AP_Setup():
             settings = tmp
 
         # Time to implement
-            self.use_ini_file(settings)
+            return self.use_ini_file(settings)
+            
         else:
             # Something went wrong with the .ini file
             return False
@@ -104,7 +117,8 @@ class AP_Setup():
         Note:
             Persistence will not be addressed here
         Return:
-
+            True if the implementation succeed
+            False if it did not
         '''
         
         # Updating mac_address

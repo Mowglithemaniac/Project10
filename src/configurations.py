@@ -7,7 +7,29 @@ import ipaddress
 
 '''
 Helper functions needed by logic.py
+######### 
+- is_valid_mac_address(mac)
+- change_mac(interface, new_mac)
+#########ini file
+- ini_exist(file_path="", verbose = False)
+- ini_default_settings(verbose = False)
+- read_ini_config(file_path, verbose)
+- determine_ini_ap_type(settings = {}, verbose = False)
+- ini_populate(settings = {}, ini_type = None, verbose = False)
+#########Isolation
+- create_isolation()
+- remove_isolation()
+######### Persistence
+- persistence_status(files = [])
+- persistence_create()
+- persistence_remove()
+######### Update AP
+def update_ap()
 '''
+
+
+######### MAC addresse
+
 
 def is_valid_mac_address(mac):
     '''
@@ -18,10 +40,10 @@ def is_valid_mac_address(mac):
     '''
     # Regular expression for validating a MAC address
     pattern = re.compile(r"""
-    ^                   # start of string
-    ([0-9A-Fa-f]{2}[:-]){5}    # five groups of two hex digits followed by a colon or hyphen
-    [0-9A-Fa-f]{2}      # two hex digits
-    $                   # end of string
+    ^                           # start of string
+    ([0-9A-Fa-f]{2}[:-]){5}     # five groups of two hex digits followed by a colon or hyphen
+    [0-9A-Fa-f]{2}              # two hex digits
+    $                           # end of string
     """, re.VERBOSE)
     
     return pattern.match(mac) is not None    
@@ -56,12 +78,52 @@ def change_mac(interface, new_mac):
         return False
 
 
+######### .ini file
+
 
 def ini_exist(file_path="", verbose = False):
     '''
     Simply check if the .ini file exists
     '''
     return os.path.exists(file_path)
+
+
+def ini_default_settings(verbose = False):
+    '''
+    Purpose:
+        Define some default settings
+    Return:
+        A dictionary with the default settings
+    '''
+    default_settings = {
+        'ssid': None,                   # str
+        'mac_address': None,            # str
+        'encryption': None,             # str
+        'password': None,               # str
+        'range_from': "10.10.10.100",   # str
+        'range_to': "10.10.10.255",     # str
+        'channel': "1",                 # str
+        'persistence': None             # str
+    }
+
+    ap_name_file = 'ap_names.txt'
+    selected_line = None
+    try:
+        with open(ap_name_file, 'r') as file:
+            for index, line in enumerate(file):
+                # With a probability of 1/(index+1), replace the previous line with the current line
+                if random.randint(0, index) == 0:
+                    selected_line = line.strip()
+                
+            default_settings['ssid'] = selected_line
+    except FileNotFoundError:
+        default_settings['ssid'] = 'MyTeacherIsADummy'
+        if verbose:
+            print(f"Error: The file {ap_name_file} does not exist.")
+    except Exception as e:
+        default_settings['ssid'] = 'MyTeacherIsADummy'
+        print(f"An error occurred reading file {ap_name_file}:\n{e}")
+    return default_settings
 
 
 def read_ini_config(file_path, verbose):
@@ -108,7 +170,7 @@ def read_ini_config(file_path, verbose):
 
 
 
-def evaluate_ini_settings(settings = {}, verbose = False):
+def determine_ini_ap_type(settings = {}, verbose = False):
     '''
     Purpose:
         Review which type of AP is chosen
@@ -116,6 +178,9 @@ def evaluate_ini_settings(settings = {}, verbose = False):
         support an AP.
         Each type of AP have some required and
         optional settings based on the security.
+    Return:
+        The type of AP to be used
+        Otherwise return None
     '''
     variable = settings.get('encryption', None)
     # Need to evaluate using the security aspect
@@ -172,25 +237,11 @@ def ini_populate(settings = {}, ini_type = None, verbose = False):
     Return:
         New settings dictionary
     '''
+    default_settings = ini_default_settings(verbose)
     # Review ssid
     if settings['ssid'] == None:
         # Pick a random AP name
-        ap_name_file = 'ap_names.txt'
-        selected_line = None
-        try:
-            with open(ap_name_file, 'r') as file:
-                for index, line in enumerate(file):
-                    # With a probability of 1/(index+1), replace the previous line with the current line
-                    if random.randint(0, index) == 0:
-                        selected_line = line.strip()
-        except FileNotFoundError:
-            settings['ssid'] = 'MyTeacherIsADummy'
-            if verbose:
-                print(f"Error: The file {ap_name_file} does not exist.")
-        except Exception as e:
-            settings['ssid'] = 'MyTeacherIsADummy'
-            print(f"An error occurred reading file {ap_name_file}:\n{e}")
-    
+        settings['ssid'] = default_settings['ssid']
     # Review channel
     if settings['channel'] == None:
         settings['channel'] = '1'
@@ -246,15 +297,44 @@ def ini_populate(settings = {}, ini_type = None, verbose = False):
     else:
         acceptable_range = False
     if acceptable_range == False:
-        settings['range_from'] = '10.10.10.100'
-        settings['range_to'] = '10.10.10.255'
+        settings['range_from'] = default_settings['range_from']
+        settings['range_to'] = default_settings['range_to']
     
     return settings
 
 
+######### Isolation
+
+def create_isolation(ethernetnames = [], verbose = False):
+    '''
+    Purpose:
+        Create isolation on the machine.
+        Execute some commands
+        
+        - sudo airmon-ng check
+        parse output, grab the interfering services
+        store them in a file
+        then use
+        - sudo airmon-ng check kill
+        Then active a firewall by blocking all traffic
+        on ALL ethernet devices
+    '''
+
+    return True
 
 
-def isolation_status(files = []):
+def remove_isolation(verbose = False):
+    '''
+    Purpose:
+        Remove isolation
+    '''
+
+
+    pass
+
+######### Persistence
+
+def persistence_status(files = []):
     '''
     Purpose:
         Check whether the files related to isolation exist
@@ -262,6 +342,9 @@ def isolation_status(files = []):
         - /root/isolation.sh
     Assumption:
         If the files exist, that the content is correct.
+    Return:
+        True if the files needed for isolation is in place
+        else return False
     '''
     status = True
     missing_files = []
@@ -283,25 +366,132 @@ def isolation_status(files = []):
     return status, missing_files
 
 
-
-
-def create_isolation():
-
+def persistence_create(ethernetdevices = [], verbose = False):
     '''
     Purpose:
-        Create isolation on the machine.
- 
+        Creating persistence on the machine
+        File(s) to create
+        - /root/firewall.sh
+        - /etc/cron.d/ap_persistence
+        - /root/reset_ap.sh
+        Maybe update
+        - hostapd.con
+        - dnsmasq.conf
+
+        Intent:
+        - Firewall should block all traffic on ALL ethernet interfaces
+        - reset_ap
+
+        Afterwards the ap_settings should be reset.
+        to ensure that the AP is created
     '''
 
+    # Step 1, create files
+    ## Step 1a /root/firewall.sh, if it exist delete it to create it anew
+    ## Make sure to change file attributes as well, chmod 700 $file, + chattr +i $file
+    filename = '/root/firewall.sh'
+    if os.path.exists(filename):
+        try:
+            subprocess.run(['chattr', '-i', filename], check=True)
+        except subprocess.CalledProcessError as e:
+            if verbose:
+                print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
+            return False
+
+        os.remove(filename)  # Delete the file
+        # Attempt to open the file to write
+    try:
+        #This will create the file
+        with open(filename, 'w') as file:
+            file.write("#!/bin/sh\n\n")
+            file.write("# Flush all rules on all chains, essentially resetting the firewall\n")
+            file.write("iptables -F\n\n")
+
+            for interface in ethernetnames:
+                file.write(f"# Block all traffic on {interface}\n")
+                file.write(f"iptables -A INPUT -i {interface} -j DROP\n")
+                file.write(f"iptables -A OUTPUT -i {interface} -j DROP\n")
+                file.write(f"iptables -A FORWARD -i {interface} -j DROP\n")
+                file.write(f"iptables -A INPUT -o {interface} -j DROP\n")
+                file.write(f"iptables -A OUTPUT -o {interface} -j DROP\n")
+                file.write(f"iptables -A FORWARD -o {interface} -j DROP\n")
+                file.write("\n")
+    except IOError as e:
+        if verbose:
+            print(f"    Failed to write to {filename}: {str(e)}")
+        return False
+
+    #step 1a Change file metadata (permissions and attributes)
+    os.chmod(filename, 0o700)  # Make the script executable by the owner only
+    try:
+        subprocess.run(['chattr', '+i', filename], check=True)  # Make the file immutable
+    except subprocess.CalledProcessError as e:
+        if verbose:
+            print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
+        return False
+
+
+    # Step 1b, /etc/cron.d/ap_persistence
+    ## If file exist, delete it
+    filename = '/etc/cron.d/ap_persistence'
+    if os.path.exists(filename):
+        try:
+            subprocess.run(['chattr', '-i', filename], check=True)
+        except subprocess.CalledProcessError as e:
+            if verbose:
+                print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
+            return False
+
+        os.remove(filename)  # Delete the file
+        # Attempt to open the file to write
+    try:
+        #This will create the file
+        with open(filename, 'w') as file:
+            file.write("#!/bin/sh\n\n")
+            file.write("# Flush all rules on all chains, essentially resetting the firewall\n")
+            file.write("iptables -F\n\n")
+
+            for interface in ethernetnames:
+                file.write(f"# Block all traffic on {interface}\n")
+                file.write(f"iptables -A INPUT -i {interface} -j DROP\n")
+                file.write(f"iptables -A OUTPUT -i {interface} -j DROP\n")
+                file.write(f"iptables -A FORWARD -i {interface} -j DROP\n")
+                file.write(f"iptables -A INPUT -o {interface} -j DROP\n")
+                file.write(f"iptables -A OUTPUT -o {interface} -j DROP\n")
+                file.write(f"iptables -A FORWARD -o {interface} -j DROP\n")
+                file.write("\n")
+    except IOError as e:
+        if verbose:
+            print(f"    Failed to write to {filename}: {str(e)}")
+        return False
+
+    #step 1a Change file metadata (permissions and attributes)
+    os.chmod(filename, 0o700)  # Make the script executable by the owner only
+    try:
+        subprocess.run(['chattr', '+i', filename], check=True)  # Make the file immutable
+    except subprocess.CalledProcessError as e:
+        if verbose:
+            print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
+        return False
+
+
+
+
+    # Step 1c, /root/reset_ap.sh
+
+
+    return True
+
+
+
+def persistence_remove():
     pass
 
-def remove_isolation():
-    '''
-    Purpose:
-        Remove isolation
-    '''
-    pass
 
+######### 
+
+def update_ap():
+    pass
 
 
 
@@ -328,15 +518,16 @@ if __name__ == "__main__":
     # mac_addresses = ["1A:2B:3C:4D:5E:6F", "1G:2H:3I:4J:5K:6L", "00:1A:2B:3C:4D:5E", "derp"]
     # for mac in mac_addresses:
     #    print(f"{mac}: {is_valid_mac_address(mac)}")
-    test = ["Configuration_files/default.ini", "Configuration_files/extended.ini", "Configuration_files/standard1.ini", "Configuration_files/standard2.ini", "Configuration_files/minimal1.ini"]
-    for file in test:
-        config_settings = read_ini_config(file, False)
-
-        print("\x1b[33m[!]\x1b[0m")
-        print(config_settings)
-        print("\x1b[31m[!]\x1b[0m")
+#    test = ["Configuration_files/default.ini", "Configuration_files/extended.ini", "Configuration_files/standard1.ini", "Configuration_files/standard2.ini", "Configuration_files/minimal1.ini"]
+#    for file in test:
+#        config_settings = read_ini_config(file, False)
+#
+#        print("\x1b[33m[!]\x1b[0m")
 #        print(config_settings)
-
+#        print("\x1b[31m[!]\x1b[0m")
+#        print(config_settings)
+    settings = ini_default_settings(True)
+    print(settings)
 
 
 
@@ -346,12 +537,12 @@ if __name__ == "__main__":
 ############# supported .ini settings
 # 'ssid'          : str 
 # 'mac_address'   : str 
-# 'encryption'    : str 
+# 'encryption'    : str 'none'/'wpa2'
 # 'password'      : str 
 # 'range_from'    : str 
 # 'range_to'      : str 
 # 'channel'       : str 
-
+# 'persistence'   : str 'yes'/'no'
 
 
 ############# hostapd conf file, 
