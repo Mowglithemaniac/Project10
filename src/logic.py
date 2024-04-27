@@ -36,8 +36,7 @@ class AP_Setup():
         An .ini file was supplied, so....
         let's see if it is working and can be used
         '''
-        if len(self.ini_file) > 0:
-            changes_made = self.ini_choice()
+        changes_made = self.ini_choice()
         if changes_made:
             changes_made = False
             print()
@@ -59,9 +58,16 @@ class AP_Setup():
         # if any test fail, set the variable to False
         ini_verified = True
         ini_type = None
-        print("\x1b[34m[?]\x1b[0m .ini file used  : "+ self.ini_file)
-        # See if file exist
-        ini_verified = configurations.ini_exist(self.ini_file, self.verbose)
+
+        # See if an ini_file was supplied
+        if self.ini_verified != None:
+            print("\x1b[34m[?]\x1b[0m .ini file used  : "+ self.ini_file)
+        else:
+            ini_verified = False
+
+        # See if file (supplied argument) exists
+        if ini_verified:
+            ini_verified = configurations.ini_exist(self.ini_file, self.verbose)
         if ini_verified:
             print(" "*22+"File exists")
         else:
@@ -97,7 +103,7 @@ class AP_Setup():
 
 
 
-    def use_ini_file(self, settings = {}):
+    def use_ini_file(self, settings = {}, verbose = False):
         '''
         Purpose:
             By this point, everything related to the .ini
@@ -131,23 +137,29 @@ class AP_Setup():
         # dnsmasq.conf file (dhcp server) first.
 
         # check if file argument is supplied
-        if not self.ini_file_path:
+        if self.ini_file_path == None:
             return None
 
-        if not configurations.ini_exist(self.ini_file_path): # does not exist
+        # File does not exist
+        if not configurations.ini_exist(self.ini_file_path):
             print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mEdge case\x1b[0m         : No Wireless Interface located")
             return None
 
+        # Retrieve the settings, and store them in a dictionary
         config_settings = configurations.read_ini_config(self.ini_file_path, self.verbose)
         if not config_settings:
             print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mEdge case\x1b[0m       : No Wireless Interface located")
             return None
 
-        self.ap_type = configurations.determine_ini_ap_type(config_settings)
+        # Retrieve AP type
+        self.ap_type = configurations.determine_ini_ap_type(config_settings, self.verbose)
         if self.ap_type == None:
             print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mEdge case\x1b[0m       : No Wireless Interface located")
             return None
 
+        # Populate the unused settings with default values
+        tmp = configurations.ini_populate(config_settings, self.verbose)
+        config_settings = tmp
 
 
 
