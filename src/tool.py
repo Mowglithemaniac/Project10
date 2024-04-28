@@ -21,7 +21,7 @@ parser.add_argument('-n', type=str, default=None,
 parser.add_argument('-v', action='store_true', help="Verbose mode")
 parser.add_argument('-i', type=str, default=None,
                     help='Name of the .ini file to be used')
-
+parser.add_argument('-y', action='store_true', help="Auto accept for faster setup")
 
 
 if __name__ == "__main__":
@@ -105,7 +105,9 @@ if __name__ == "__main__":
         ethernetname,        # List of strings
         wifiname,            # String
         ini_file,            # String
-        persistence_achieved # Boolean
+        persistence_achieved,# Boolean
+        args.q,              # Boolean, test value
+        args.y               # Boolean
     )
 
     AP_logic.logic_skeleton()

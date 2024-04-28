@@ -11,13 +11,18 @@ class AP_Setup():
         ethernetname,           # List of strings
         wifiname,               # String
         ini_file,               # String
-        persistence_achieved    # Boolean
+        persistence_achieved,   # Boolean
+        test,                   # Boolean (For testing purposes)
+        autoaccept              # Boolean
     ):    
         self.verbose = verbose
         self.internet_status =  internet_status
         self.ethernetname = ethernetname
         self.wifiname =  wifiname
         self.ini_file =  ini_file
+        self.persistence_achieved = persistence_achieved
+        self.test = test
+        self.autoaccept = autoaccept
 
         self.ap_type = None
 
@@ -78,89 +83,90 @@ class AP_Setup():
         if ini_verified:
             settings = configurations.read_ini_config(self.ini_file, self.verbose)
             if settings == None:
-                print(" "*20+"- 'Settings' section is \x1b[5;34;41mmissing\x1b[0m.")
                 ini_verified = False
+                if self.verbose:
+                    print(" "*20+"- 'Settings' section is \x1b[5;34;41mmissing\x1b[0m.")
 
         # Evaluate the settings
         # Are the settings enough to create an AP?
         if ini_verified:
-            ini_type = configurations.evaluate_ini_settings(settings, self.verbose)
+            ini_type = configurations.determine_ini_ap_type(settings, self.verbose)
             if ini_type == None:
                 ini_verified = False
+                if self.verbose:
+                    print("ini file failed. Unable to determine AP type")
 
         # Populate the required settings
         if ini_verified:
-            tmp = configurations.ini_populate(settings, ini_type, self.verbose)
+            tmp = configurations.ini_populate(settings, self.verbose)
             settings = tmp
 
         # Time to implement
-            return self.use_ini_file(settings)
-            
+        # Remember to create/update the hostapd.conf and dnsmasq.conf
+            ###### TESTING
+            if self.test:
+                print("\x1b[46m[?]\x1b[0m .ini file"+" "*7+": \x1b[46mTEST\x1b[0m accepted")
+                print(" "*4+"Settings used   :")
+                # Print each key-value pair with aligned values
+                max_key_length = max(len(key) for key in settings)
+                for key, value in settings.items():
+                    if value != None:
+                        print(" "*22+f"{key.ljust(max_key_length)} | '{value}'")
+                print(" "*4+"Settings omitted:")
+                for key, value in settings.items():
+                    if value == None:
+                        print(" "*22+f"{key.ljust(max_key_length)} | {value}")
+                return True
+ 
+            user_input = ''
+            print("Ready to implement!")
+            if self.autoaccept:
+                user_input = 'y'
+                print("Auto accept, implementing AP based on supplied settings")
+            else:
+                user_input = input("Do you wish to proceed (Y/N)?")
+            if user_input.lower() == 'y':
+                '''
+                Purpose:
+                    Create the AP
+                    By this point, everything related to the .ini
+                    file should have been verified.
+                    - All packages are installed
+                    - AP ready to be setup
+                    There are separate aspects to implement
+                    unrelated to another
+                    - mac_address
+                    - Update dnsmasq.conf file
+                    - Update hostapd.conf file
+                    - Reset/initialize AP settings
+                      This includes isolation
+                Return:
+                    True if the implementation succeed
+                    False if it did not
+                '''
+                print(" "*4+"Settings used   :")
+                # Print each key-value pair with aligned values
+                max_key_length = max(len(key) for key in settings)
+                for key, value in settings.items():
+                    if value != None:
+                        print(" "*22+f"{key.ljust(max_key_length)} | '{value}'")
+                print(" "*4+"Settings omitted:")
+                for key, value in settings.items():
+                    if value == None:
+                        print(" "*22+f"{key.ljust(max_key_length)} | {value}")
+
+                result = configurations.update_ap(settings,self.wifiname, self.verbose)
+
+                ## TODO: REVIEW AND IMPLEMENT PERSISTENCE
+
+                return result
+            else:
+                return False
         else:
             # Something went wrong with the .ini file
             print("\x1b[34m[?]\x1b[0m .ini file       : Not used")
             return False
 
-
-
-
-    def use_ini_file(self, settings = {}, verbose = False):
-        '''
-        Purpose:
-            By this point, everything related to the .ini
-            file should have been verified.
-            - All packages are installed
-            - AP ready to be setup
-            Time to implement it.
-            There are separate aspects to implement
-            unrelated to another
-            - Reset AP settings
-            - mac_address
-            - dnsmasq.conf file for the dhcp server
-            - hostapd.conf file for hostapd
-        Note:
-            Persistence will not be addressed here
-        Return:
-            True if the implementation succeed
-            False if it did not
-        '''
-        
-        # Updating mac_address
-        # Easy to do
-        if configurations.change_mac(self.wifiname, settings['mac_address']):
-            # mac change was successfull
-            pass
-        else:
-            # mac change was unsuccessfull
-            pass
-        
-        # Look at settings related to the
-        # dnsmasq.conf file (dhcp server) first.
-
-        # check if file argument is supplied
-        if self.ini_file_path == None:
-            return None
-
-        # File does not exist
-        if not configurations.ini_exist(self.ini_file_path):
-            print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mEdge case\x1b[0m         : No Wireless Interface located")
-            return None
-
-        # Retrieve the settings, and store them in a dictionary
-        config_settings = configurations.read_ini_config(self.ini_file_path, self.verbose)
-        if not config_settings:
-            print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mEdge case\x1b[0m       : No Wireless Interface located")
-            return None
-
-        # Retrieve AP type
-        self.ap_type = configurations.determine_ini_ap_type(config_settings, self.verbose)
-        if self.ap_type == None:
-            print("\x1b[31m[!]\x1b[0m \x1b[5;34;41mEdge case\x1b[0m       : No Wireless Interface located")
-            return None
-
-        # Populate the unused settings with default values
-        tmp = configurations.ini_populate(config_settings, self.verbose)
-        config_settings = tmp
 
 
 

@@ -64,6 +64,8 @@ def change_mac(interface='', new_mac=''):
     if new_mac == None:
         return False
     returncode = 0
+    if not is_valid_mac_address(new_mac):
+        return False
     try:
         # Bring down the network interface
         result = subprocess.run(['sudo', 'ip', 'link', 'set', interface, 'down'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -82,7 +84,7 @@ def change_mac(interface='', new_mac=''):
         print("Failed to change MAC address. Error was:")
         print(result.stderr.decode())
         return False
-    print(f"MAC address for {interface} changed to {new_mac}.")
+    print(" "*4+f"MAC address for {interface} changed to {new_mac}.")
     return True
 
 
@@ -163,17 +165,21 @@ def read_ini_config(file_path='', verbose=False):
     except configparser.Error as e:
         print(" "*22+f"Warning: Failed to read the config file: {str(e)}")
         return None 
-
     # Optional 'Settings' section
     if 'Settings' in config:
         if verbose:
-            print(" "*4+"Settings loaded:")
+            for key in settings.keys():
+                if key in config['Settings']:
+                    settings[key] = config['Settings'][key]
+            print(" "*4+"Settings loaded :")
         # Individually check each setting
-        for key in settings.keys():
-            if key in config['Settings']:
-                settings[key] = config['Settings'][key]
-                if verbose:
-                    print(" "*20+"+ "+settings[key])
+            max_key_length = max(len(key) for key in settings)
+
+            # Print each key-value pair with aligned values
+            for key, value in settings.items():
+                if value == None:
+                    continue
+                print(" "*22+f"{key.ljust(max_key_length)} | '{value}'")
     else:
         settings = None
     return settings
@@ -195,8 +201,9 @@ def determine_ini_ap_type(settings = {}, verbose = False):
     variable = settings.get('encryption', None)
     # Need to evaluate using the security aspect
     if variable == None:
+        print("Variable set to None")
         return None
-    if variable.lower == "none":
+    if variable.lower() == "none":
         '''
         Required: 
             - encryption : none
@@ -209,17 +216,11 @@ def determine_ini_ap_type(settings = {}, verbose = False):
             - channel
         '''
         return 'none'
-    elif variable.lower == "wpa2":
+    elif variable.lower() == "wpa2":
         '''
         Required: 
             - encryption : wpa2
             - password
-        Optional:
-            - ssid
-            - mac_address
-            - range_from
-            - range_to
-            - channel
         '''
         if settings.get('password', None) != None:
             return 'wpa2'
@@ -323,6 +324,11 @@ def create_isolation(ip='', wifiname = '', verbose = False):
         - Activate a firewall by blocking all traffic
           on ALL ethernet devices, allowing only the wifi device
         - sudo airmon-ng check kill
+    Note:
+        It is assumed that hostapd.conf and dnsmasq.conf files
+        are already in place.
+        And that these commands will run flawlessly, as all prerequisites
+        have been met.
     '''
     commands = [
         ["sudo", "iptables", "-F",],
@@ -330,15 +336,13 @@ def create_isolation(ip='', wifiname = '', verbose = False):
         ["sudo", "iptables", "-P", "OUTPUT", "DROP"],
         ["sudo", "iptables", "-P", "FORWARD", "DROP"],
         ["sudo", "iptables", "-A", "INPUT", "-i", wifiname, "-j", "ACCEPT"],
-        ["sudo", "iptables", "-A", "OUTPUT", "-i", wifiname, "-j", "ACCEPT"],
         ["sudo", "iptables", "-A", "FORWARD", "-i", wifiname, "-j", "ACCEPT"],
-        ["sudo", "iptables", "-A", "INPUT", "-o", wifiname, "-j", "ACCEPT"],
         ["sudo", "iptables", "-A", "OUTPUT", "-o", wifiname, "-j", "ACCEPT"],
         ["sudo", "iptables", "-A", "FORWARD", "-o", wifiname, "-j", "ACCEPT"],
         ["sudo", "airmon-ng", "check", "kill"],
-        ["sudo", "ip" "link", "set", wifiname, "down"],
-        ["sudo", "ip" "addr", "add", f"{ip}/24"],
-        ["sudo", "ip" "link", "set", wifiname, "up"],
+        ["sudo", "ip", "link", "set", wifiname, "down"],
+        ["sudo", "ip", "addr", "add", f"{ip}/24", "dev", wifiname],
+        ["sudo", "ip", "link", "set", wifiname, "up"],
         ["sudo", "systemctl", "unmask", "hostapd"],
         ["sudo", "systemctl", "unmask", "dnsmasq"],
         ["sudo", "systemctl", "restart", "hostapd"],
@@ -353,9 +357,9 @@ def create_isolation(ip='', wifiname = '', verbose = False):
             result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             if verbose:
                 if result.returncode == 0:
-                    print(" "*4+"\x1b[32m[+]\033[0m"+f"\x1b[35m{' '.join(command)}\033[0m")
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
                 else:
-                    print(" "*4+"\x1b[31m[!]\033[0m"+f"\x1b[35m{' '.join(command)}\033[0m")
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
         except subprocess.CalledProcessError as e:
             if verbose:
                 print(" "*4+f"\x1b[41m[!] Error executing command\033[0m:\n"+" "*4+f"\x1b[35m{' '.join(command)}\033[0m\n    Error: {str(e)}")
@@ -385,9 +389,9 @@ def remove_isolation(verbose = False):
             result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             if verbose:
                 if result.returncode == 0:
-                    print(" "*4+"\x1b[32m[+]\033[0m"+f"\x1b[35m{' '.join(command)}\033[0m")
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
                 else:
-                    print(" "*4+"\x1b[31m[!]\033[0m"+f"\x1b[35m{' '.join(command)}\033[0m")
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
         except subprocess.CalledProcessError as e:
             if verbose:
                 print(" "*4+f"\x1b[41m[!] Error executing command\033[0m:\n"+" "*4+f"\x1b[35m{' '.join(command)}\033[0m\n    Error: {str(e)}")
@@ -515,7 +519,7 @@ def persistence_create(ip='',wifiname = [], verbose = False):
         with open(filename, 'w') as file:
             file.write("sudo airmon-ng check kill\n")
             file.write("sudo ip link set "+wifiname+"down\n")
-            file.write("sudo ip addr add "+f"{ip}/24\n")
+            file.write("sudo ip addr add "+f"{ip}/24 dev "+wifiname+"\n")
             file.write("sudo ip link set "+wifiname+"up\n")
             file.write("sudo systemctl unmask hostapd\n")
             file.write("sudo systemctl unmask dnsmasq\n")
@@ -614,8 +618,8 @@ def find_usable_ip(range_from ='', range_to=''):
         Requires a range_from, range_to
     '''
     # Convert start and end IP from string to IPv4Address objects
-    start = ipaddress.IPv4Address(start_ip)
-    end = ipaddress.IPv4Address(end_ip)
+    start = ipaddress.IPv4Address(range_from)
+    end = ipaddress.IPv4Address(range_to)
     
     # Calculate networks from the range and capture them in a list
     networks = list(ipaddress.summarize_address_range(start, end))
@@ -634,15 +638,6 @@ def find_usable_ip(range_from ='', range_to=''):
         return str(usable_hosts[-1])  # You can choose another strategy for selecting the IP
     else:
         return None
-
-# Example usage
-start_ip = "192.168.1.100"
-end_ip = "192.168.1.200"
-usable_ip = find_usable_ip(start_ip, end_ip)
-if usable_ip:
-    print(f"Selected usable IP Address: {usable_ip}")
-else:
-    print("No usable IP found within the range.")
 
 
 def update_dnsmasq(settings = {}, wifiname='', verbose=False):
@@ -692,12 +687,12 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
     try:
         #This will create the file
         with open(filename, 'w') as file:
-            if ap_type.lower == 'none':
+            if ap_type.lower() == 'none':
                 file.write("driver=nl80211\n")
                 file.write(f"channel={settings['channel']}\n")
                 file.write(f"interface={wifiname}\n")
                 file.write(f"ssid={settings['ssid']}\n")
-            elif ap_type.lower == 'wpa2':
+            elif ap_type.lower() == 'wpa2':
                 file.write(f"interface={wifiname}\n")
                 file.write('driver=nl80211\n')
                 file.write(f"ssid={settings['ssid']}\n")
@@ -734,10 +729,19 @@ def update_ap(settings={}, wifiname='', verbose=False):
         - write to hostapd
         - Execute commands to activate the AP
     '''
-    update_dnsmasq(settings, verbose)
+
+    # Updating mac_address / Easy to do
+    if change_mac(wifiname, settings['mac_address']):
+        # mac change was successfull
+        pass
+    else:
+        # mac change was unsuccessfull
+        pass
+
+    status = update_dnsmasq(settings, wifiname, verbose)
     # Note: The verification that the settings['encryption']
-    # is != None has been clarified at this stage
-    update_hostapd(settings, settings['encryption'].lower, verbose)
+    # is valid, i.e. != None or 'none' or 'wpa2' has been clarified at this stage
+    update_hostapd(settings, wifiname, settings['encryption'].lower(), verbose)
     ip = find_usable_ip(settings['range_from'], settings['range_to'])
     create_isolation(ip, wifiname, verbose)
 
@@ -771,9 +775,10 @@ if __name__ == "__main__":
 #        print(config_settings)
 #        print("\x1b[31m[!]\x1b[0m")
 #        print(config_settings)
-    pass
 
 
+    ip = find_usable_ip("10.10.10.100", "10.10.10.255")
+    print(ip)
 
 
 
@@ -836,7 +841,4 @@ dhcp-range=[IP_FROM],[IP_TO],12h
 '''
 
 
-###
-# todo
-# Force configure 'ip' of interface
-# so that the dhcp server can be set up
+                     
