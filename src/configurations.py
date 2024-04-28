@@ -5,6 +5,7 @@ import re
 import random
 import ipaddress
 
+
 '''
 Helper functions needed by logic.py
 ######### 
@@ -17,16 +18,17 @@ Helper functions needed by logic.py
 + determine_ini_ap_type(settings = {}, verbose = False)
 + ini_populate(settings = {}, verbose = False)
 #########Isolation
-+ create_isolation(wifiname = '', verbose = False)
++ create_isolation(ip='', wifiname = '', verbose = False)
 + remove_isolation()
 ######### Persistence
 - persistence_status(files = [])
-- persistence_create(wifiname = [], verbose = False)
+- persistence_create(ip='',wifiname = [], verbose = False)
 + persistence_remove(verbose = False)
 ######### Update AP
+- find_usable_ip(range_from ='', range_to='')
 - update_dnsmasq(settings = {}, verbose=False)
 - update_hostapd(settings = {}, ap_type='', verbose=False)
-- update_ap()
+- update_ap(settings={}, wifiname='', verbose=False)
 '''
 
 ######### MAC addresse
@@ -313,7 +315,7 @@ def ini_populate(settings = {}, verbose = False):
 
 ######### Isolation
 
-def create_isolation(wifiname = '', verbose = False):
+def create_isolation(ip='', wifiname = '', verbose = False):
     '''
     Purpose:
         Create isolation on the machine.
@@ -334,11 +336,16 @@ def create_isolation(wifiname = '', verbose = False):
         ["sudo", "iptables", "-A", "OUTPUT", "-o", wifiname, "-j", "ACCEPT"],
         ["sudo", "iptables", "-A", "FORWARD", "-o", wifiname, "-j", "ACCEPT"],
         ["sudo", "airmon-ng", "check", "kill"],
+        ["sudo", "ip" "link", "set", wifiname, "down"],
+        ["sudo", "ip" "addr", "add", f"{ip}/24"],
+        ["sudo", "ip" "link", "set", wifiname, "up"],
         ["sudo", "systemctl", "unmask", "hostapd"],
         ["sudo", "systemctl", "unmask", "dnsmasq"],
         ["sudo", "systemctl", "restart", "hostapd"],
         ["sudo", "systemctl", "restart", "dnsmasq"]
     ]
+
+
     if verbose:
         print(" "*4+"Executing commands: (RED - Fail, GREEN - Success)")
     for command in commands:
@@ -420,7 +427,7 @@ def persistence_status(files = []):
     return status, missing_files
 
 
-def persistence_create(wifiname = [], verbose = False):
+def persistence_create(ip='',wifiname = [], verbose = False):
     '''
     Purpose:
         Creating persistence on the machine
@@ -507,6 +514,9 @@ def persistence_create(wifiname = [], verbose = False):
         #This will create the file
         with open(filename, 'w') as file:
             file.write("sudo airmon-ng check kill\n")
+            file.write("sudo ip link set "+wifiname+"down\n")
+            file.write("sudo ip addr add "+f"{ip}/24\n")
+            file.write("sudo ip link set "+wifiname+"up\n")
             file.write("sudo systemctl unmask hostapd\n")
             file.write("sudo systemctl unmask dnsmasq\n")
             file.write("sudo systemctl restart hostapd\n")
@@ -547,6 +557,8 @@ def persistence_create(wifiname = [], verbose = False):
             file.write("# SHELL=/bin/sh\n")
             file.write("## Grap your current PATH and insert it\n")
             file.write("# PATH=...\n\n")
+#            PATH= os.environ.get('PATH') 
+#            file.write("# PATH="+f"{PATH}\"\n\n")
             file.write("@reboot root /bin/sh /root/firewall.sh\n")
             file.write("@reboot root /bin/sh /root/reset_ap.sh\n")
     except IOError as e:
@@ -594,6 +606,45 @@ def persistence_remove(verbose = False):
 
 ######### 
 
+def find_usable_ip(range_from ='', range_to=''):
+    '''
+    Purpose
+        Find a usable IP which the interface
+        can use, in order to setup the AP
+        Requires a range_from, range_to
+    '''
+    # Convert start and end IP from string to IPv4Address objects
+    start = ipaddress.IPv4Address(start_ip)
+    end = ipaddress.IPv4Address(end_ip)
+    
+    # Calculate networks from the range and capture them in a list
+    networks = list(ipaddress.summarize_address_range(start, end))
+    
+    if not networks:
+        return None  # Return None if no network can be summarized
+
+    # Use the first network (smallest subnet that fits the range)
+    network = networks[0]
+    
+    # Get all usable hosts in this network
+    usable_hosts = list(network.hosts())
+    
+    # Select a usable IP
+    if usable_hosts:
+        return str(usable_hosts[-1])  # You can choose another strategy for selecting the IP
+    else:
+        return None
+
+# Example usage
+start_ip = "192.168.1.100"
+end_ip = "192.168.1.200"
+usable_ip = find_usable_ip(start_ip, end_ip)
+if usable_ip:
+    print(f"Selected usable IP Address: {usable_ip}")
+else:
+    print("No usable IP found within the range.")
+
+
 def update_dnsmasq(settings = {}, wifiname='', verbose=False):
     '''
     Purpose
@@ -622,9 +673,6 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
             print(f"    Failed to write to {filename}:\n    {str(e)}")
         return False
     return True
-
-
-
 
 def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
     '''
@@ -675,8 +723,23 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
     return True
 
 
-def update_ap():
-    pass
+def update_ap(settings={}, wifiname='', verbose=False):
+    '''
+    Purpose:
+        A combination of all the necessary functions
+        needed to update the Access Point.
+        By this stage, it is assumed that the settings variable
+        has been populated and can be used for this purpose.
+        - write to dnsmasq
+        - write to hostapd
+        - Execute commands to activate the AP
+    '''
+    update_dnsmasq(settings, verbose)
+    # Note: The verification that the settings['encryption']
+    # is != None has been clarified at this stage
+    update_hostapd(settings, settings['encryption'].lower, verbose)
+    ip = find_usable_ip(settings['range_from'], settings['range_to'])
+    create_isolation(ip, wifiname, verbose)
 
 
 ############# Isolation status of the machine.
@@ -694,8 +757,6 @@ def update_ap():
 
 
 #############
-
-
 
 # Example usage
 if __name__ == "__main__":
@@ -773,3 +834,9 @@ domain-needed
 bogus-priv
 dhcp-range=[IP_FROM],[IP_TO],12h
 '''
+
+
+###
+# todo
+# Force configure 'ip' of interface
+# so that the dhcp server can be set up

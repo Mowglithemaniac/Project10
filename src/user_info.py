@@ -132,7 +132,6 @@ def review_isolation_status(persistence_achieved = None, files =[], verbose = Fa
             print(" "*20+"- '"+file+"'")
 
 
-
 if __name__ == "__main__":
     # Example usage: Checking the status of various system daemons
     services_to_check = ['hostapd', 'NetworkManager', 'NetworkManager.service', 'apache2.service', 'mysql.service', 'stuff.service', 'wpa_supplicant']

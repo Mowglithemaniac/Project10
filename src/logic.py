@@ -60,19 +60,19 @@ class AP_Setup():
         ini_type = None
 
         # See if an ini_file was supplied
-        if self.ini_verified != None:
-            print("\x1b[34m[?]\x1b[0m .ini file used  : "+ self.ini_file)
-        else:
+        if self.ini_file == None or self.ini_file == '':
             ini_verified = False
+        else:
+            print("\x1b[34m[?]\x1b[0m .ini file used  : "+ self.ini_file)
 
         # See if file (supplied argument) exists
         if ini_verified:
-            ini_verified = configurations.ini_exist(self.ini_file, self.verbose)
-        if ini_verified:
-            print(" "*22+"File exists")
-        else:
-            print(" "*22+"File does not exist")
-            ini_verified = False
+            ini_verified = configurations.ini_exist(self.ini_file)
+            if ini_verified:
+                print(" "*22+"File exists")
+            else:
+                print(" "*22+"File does not exist")
+                ini_verified = False
             
         # Read the content
         if ini_verified:
@@ -98,6 +98,7 @@ class AP_Setup():
             
         else:
             # Something went wrong with the .ini file
+            print("\x1b[34m[?]\x1b[0m .ini file       : Not used")
             return False
 
 
