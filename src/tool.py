@@ -110,5 +110,10 @@ if __name__ == "__main__":
         args.y               # Boolean
     )
 
+
+    result = AP_logic.ini_choice()
+    if result == True:
+        exit(0)
+# else:         # This is implied, and therefore does not need to be explicitly set
     AP_logic.logic_skeleton()
     

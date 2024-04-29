@@ -25,6 +25,7 @@ Helper functions needed by logic.py
 - persistence_create(ip='',wifiname = [], verbose = False)
 + persistence_remove(verbose = False)
 ######### Update AP
+- retrieve_ip_from_conf(verbose = False)
 - find_usable_ip(range_from ='', range_to='')
 - update_dnsmasq(settings = {}, verbose=False)
 - update_hostapd(settings = {}, ap_type='', verbose=False)
@@ -412,23 +413,12 @@ def persistence_status(files = []):
         else return False
     '''
     status = True
-    missing_files = []
-    
-    for file in files:
-        try:
-            command = ['sudo', 'cat', file]
-            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            if result.returncode != 0:
-                missing_files.append(file)
-                status = False
-        except Exception as e:
-            print(" "*22+f"\x1b[5;34;41m[!]\x1b[0m Error accessing file")
-            print(" "*22+file)
-            print(f"    Error message   : {e}")
-            exit(1)
 
-    # Cannot think of how to use the missing_files list.
-    return status, missing_files
+    for file in files:
+        if not os.path.exists(file):
+            status = False
+
+    return status
 
 
 def persistence_create(ip='',wifiname = [], verbose = False):
@@ -605,10 +595,37 @@ def persistence_remove(verbose = False):
                 return False
             os.remove(filename)  # Delete the file
         else:
-            print(""*4+f"'{filename}' does not exist and can therefore not be removed")
+            if verbose:
+                print(""*4+f"'{filename}' does not exist and can therefore not be removed")
     return True
 
 ######### 
+
+def retrieve_ip_from_conf(verbose = False):
+    filename = '/etc/dnsmasq.conf'
+    if not os.path.exists(filename):
+        # File does not exist
+        return False
+    range_from = None
+    range_to = None
+
+    try:
+        with open(filename, "r") as file:
+            for line in file:
+                if line.startswith("dhcp-range"):
+                    parts = line.strip().split("=")
+                    if len(parts) == 2:
+                        ip_range = parts[1].split(",")
+                        if len(ip_range) == 3:
+                            ip_from = ip_range[0]
+                            ip_to = ip_range[1]
+                            break  # Stop searching after finding the first dhcp-range
+    except Exception as e:
+        print(f"Error: {e}")
+    if range_from != None and range_to != None:
+        return find_usable_ip(range_from, range_to)
+    return None
+
 
 def find_usable_ip(range_from ='', range_to=''):
     '''
@@ -663,6 +680,12 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
             file.write("domain-needed\n")
             file.write("bogus-priv\n")
             file.write(f"dhcp-range={settings['range_from']},{settings['range_to']},12h\n")
+            file.write("no-resolv\n")
+            try:
+                subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            except subprocess.CalledProcessError as e:
+                if verbose:
+                    print(""*4+f"Failed to add immutable flag to {filename}:\n    {str(e)}")
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}:\n    {str(e)}")
@@ -709,8 +732,14 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
                 file.write('wpa_pairwise=TKIP\n')
                 file.write('rsn_pairwise=CCMP\n')
             else:
-                print("Something went wrong\nFf the code ever executes this line, terminating program")
+                #This is where ap expansions would be
+                print("Something went wrong\nIf the code ever executes this line, terminating program")
                 exit(1)
+            try:
+                subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            except subprocess.CalledProcessError as e:
+                if verbose:
+                    print(""*4+f"Failed to add immutable flag to {filename}:\n    {str(e)}")
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}:\n    {str(e)}")

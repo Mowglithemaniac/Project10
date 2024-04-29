@@ -36,19 +36,56 @@ class AP_Setup():
 
         changes_made = False
 
+        default_settings = configurations.ini_default_settings(self.verbose)
+        settings = {}
+        while True:
+            print("\x1b[34m[?]\x1b[0m Manual configuration")
+            print(" "*4+"0. Terminate this program")
+            print(" "*4+"1. Tear down AP and restore connectivity")
+            print(" "*4+"2. Disable persistence")
+            print(" "*4+"3. Create persistence")
+            print(" "*4+"4. Set up an Access Point\n")
+            choice = input("Make your choice (0/1/2/3/4):")
 
-        '''
-        An .ini file was supplied, so....
-        let's see if it is working and can be used
-        '''
-        changes_made = self.ini_choice()
-        if changes_made:
-            changes_made = False
-            print()
-
-#        while True:
-#            pass
-
+            try:
+                if not (0 <= choice <= 4):
+                    print("Input must be in the range of 0 to 4. Please try again.")
+                    continue
+            except ValueError:
+                print("Invalid input. Please enter a valid integer.")
+            if choice == 0:
+                exit(0)
+            elif choice == 1:
+                print("Removing isolation")
+                configurations.remove_isolation(self.verbose)
+            elif choice == 2:
+                print("Disabling persistence")
+                persistence_files = ["/root/firewall.sh", "/root/create_ap.sh", "/etc/cron.d/ap_persistence"]
+                status = configurations.persistence_status(persistence_files)
+                if status == False:
+                    print("There is no persistence to remove.")
+                    continue
+                configurations.persistence_remove(self.verbose)
+            elif choice == 3:
+                print("Creating persistence")
+                print("Note: It is assumed that the necessary AP configuration")
+                print("      files are already in place.")
+                print("      If alterations are made to the ip ranges of those files")
+                print("      please rerun persistence creation. For security reasons")
+                print("      changes in the ip range, cannot be retroactively")
+                print("      accounted for once persistence have been set.")
+                # Time to get the range_from and range_to from the /etc/dnsmasq.conf file
+                # and then by extension an IP which can be used
+                ip = configurations.find_usable_ip(self.verbose)
+                if ip == None:
+                    print("Unable to create persistence, as it was not possible")
+                    print("to retrive a range, to generate a static IP needed for")
+                    print("correctly configuring a dhcp server.")
+                    continue
+                configurations.persistence_create(ip, self.wifiname, self.verbose)
+            elif choice == 4:
+                    
+            print("="*25)
 
     def ini_choice(self):
         '''
