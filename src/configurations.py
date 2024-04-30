@@ -440,12 +440,17 @@ def persistence_create(ip='',wifiname = [], verbose = False):
     ## Make sure to change file attributes as well, chmod 700 $file, + chattr +i $file
     filename = '/root/firewall.sh'
     if os.path.exists(filename):
-        try:
-            subprocess.run(['chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        except subprocess.CalledProcessError as e:
-            if verbose:
-                print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
-            return False
+        flags = ['-i', '-e']
+        for flag in flags:
+            command = ['chattr', flag, filename]
+            try:
+                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                if verbose:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+            except subprocess.CalledProcessError as e:
+                if verbose:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                return False
 
         os.remove(filename)  # Delete the file
         # Attempt to open the file to write
@@ -489,13 +494,17 @@ def persistence_create(ip='',wifiname = [], verbose = False):
     ## If file exist, delete it
     filename = '/root/create_ap.sh'
     if os.path.exists(filename):
-        try:
-            subprocess.run(['chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        except subprocess.CalledProcessError as e:
-            if verbose:
-                print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
-            return False
-
+        flags = ['-i', '-e']
+        for flag in flags:
+            command = ['chattr', flag, filename]
+            try:
+                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                if verbose:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+            except subprocess.CalledProcessError as e:
+                if verbose:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                return False
         os.remove(filename)  # Delete the file
     # Attempt to open the file to write
     try:
@@ -528,13 +537,17 @@ def persistence_create(ip='',wifiname = [], verbose = False):
     ## If file exist, delete it
     filename = '/etc/cron.d/ap_persistence'
     if os.path.exists(filename):
-        try:
-            subprocess.run(['chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        except subprocess.CalledProcessError as e:
-            if verbose:
-                print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
-            return False
-
+        flags = ['-i', '-e']
+        for flag in flags:
+            command = ['chattr', flag, filename]
+            try:
+                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                if verbose:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+            except subprocess.CalledProcessError as e:
+                if verbose:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                return False
         os.remove(filename)  # Delete the file
     # Attempt to open the file to write
     try:
@@ -726,6 +739,8 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
     if os.path.exists(filename):
         try:
             subprocess.run(['sudo', 'chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            subprocess.run(['sudo', 'chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
         except subprocess.CalledProcessError as e:
             if verbose:
                 print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")

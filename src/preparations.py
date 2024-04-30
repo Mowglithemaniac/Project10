@@ -280,7 +280,7 @@ def internet_status(interface, verbose = False):
 # all traffic through the ethernet device
 
 
-def persistance_status(files=[], verbose = False):
+def persistence_status(files=[], verbose = False):
     '''
     Purpose:
         Check whether the files related to isolation exist
@@ -291,8 +291,14 @@ def persistance_status(files=[], verbose = False):
     '''
     # status = Boolean
     missing_files = []
-    status, missing_files = configurations.persistence_status(files)
-    print("\x1b[33m[?]\x1b[0m Persistence     : ", end='')
+    status = True
+    for file in files:
+        if not os.path.exists(file):
+            missing_files.append(file)
+            status = False
+    if verbose:
+        print("\x1b[33m[?]\x1b[0m Persistence     : ", end='')
+
     if status:
         print("Files in place")
     else:

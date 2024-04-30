@@ -57,7 +57,7 @@ class AP_Setup():
             choice = input("Make your choice (0/1/2/3/4):\n")
 
             try:
-                if not (0 <= choice <= 4):
+                if not (0 <= int(choice) <= 4):
                     print("Input must be in the range of 0 to 4. Please try again.")
                     continue
             except ValueError:

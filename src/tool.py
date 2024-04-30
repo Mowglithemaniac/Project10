@@ -74,7 +74,7 @@ if __name__ == "__main__":
         if preparations.internet_status(interface, verbose):
             if not internet_status:
                 internet_status = True
-    persistence_achieved, _  = preparations.persistance_status(persistence_files, verbose)
+    persistence_achieved, _  = preparations.persistence_status(persistence_files, verbose)
 
 ####################################
     print(25*"=")
