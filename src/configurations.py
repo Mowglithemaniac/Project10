@@ -442,7 +442,7 @@ def persistence_create(ip='',wifiname = [], verbose = False):
     if os.path.exists(filename):
         flags = ['-i', '-e']
         for flag in flags:
-            command = ['chattr', flag, filename]
+            command = ['sudo', 'chattr', flag, filename]
             try:
                 subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 if verbose:
@@ -483,7 +483,7 @@ def persistence_create(ip='',wifiname = [], verbose = False):
     os.chmod(filename, 0o500)  # Make the script executable by the owner only
     try:
         # Make the file immutable
-        subprocess.run(['chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)  
+        subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)  
     except subprocess.CalledProcessError as e:
         if verbose:
             print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
@@ -496,7 +496,7 @@ def persistence_create(ip='',wifiname = [], verbose = False):
     if os.path.exists(filename):
         flags = ['-i', '-e']
         for flag in flags:
-            command = ['chattr', flag, filename]
+            command = ['sudo', 'chattr', flag, filename]
             try:
                 subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 if verbose:
@@ -527,7 +527,7 @@ def persistence_create(ip='',wifiname = [], verbose = False):
     #step 1b Change file metadata (permissions and attributes)
     os.chmod(filename, 0o500)  # Make the script executable by the owner only
     try:
-        subprocess.run(['chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)  # Make the file immutable
+        subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)  # Make the file immutable
     except subprocess.CalledProcessError as e:
         if verbose:
             print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
@@ -539,7 +539,7 @@ def persistence_create(ip='',wifiname = [], verbose = False):
     if os.path.exists(filename):
         flags = ['-i', '-e']
         for flag in flags:
-            command = ['chattr', flag, filename]
+            command = ['sudo', 'chattr', flag, filename]
             try:
                 subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 if verbose:
@@ -571,7 +571,7 @@ def persistence_create(ip='',wifiname = [], verbose = False):
     os.chmod(filename, 0o500)  # Make the script executable by the owner only
     try:
         # Make the file immutable
-        subprocess.run(['chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     except subprocess.CalledProcessError as e:
         if verbose:
             print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
@@ -595,7 +595,7 @@ def persistence_remove(verbose = False):
     for filename in persistence_files:
         if os.path.exists(filename):
             try:
-                subprocess.run(['chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                subprocess.run(['sudo', 'chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             except subprocess.CalledProcessError as e:
                 if verbose:
                     print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
@@ -738,7 +738,7 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
     filename = '/etc/dnsmasq.conf'
     flags = ['-i', '-e']
     for flag in flags:
-        command = ['chattr', flag, filename]
+        command = ['sudo', 'chattr', flag, filename]
         try:
             subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             if verbose:
@@ -757,15 +757,15 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
             file.write("bogus-priv\n")
             file.write(f"dhcp-range={settings['range_from']},{settings['range_to']},12h\n")
             file.write("no-resolv\n")
-            try:
-                subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            except subprocess.CalledProcessError as e:
-                if verbose:
-                    print(""*4+f"Failed to add immutable flag to {filename}:\n    {str(e)}")
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}:\n    {str(e)}")
         return False
+    try:
+        subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    except subprocess.CalledProcessError as e:
+        if verbose:
+            print(""*4+f"Failed to add immutable flag to {filename}:\n    {str(e)}")
     return True
 
 def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
@@ -779,7 +779,7 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
 
         flags = ['-i', '-e']
         for flag in flags:
-            command = ['chattr', flag, filename]
+            command = ['sudo', 'chattr', flag, filename]
             try:
                 subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
                 if verbose:
@@ -816,15 +816,16 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
                 #This is where ap expansions would be
                 print("Something went wrong\nIf the code ever executes this line, terminating program")
                 exit(1)
-            try:
-                subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            except subprocess.CalledProcessError as e:
-                if verbose:
-                    print(""*4+f"Failed to add immutable flag to {filename}:\n    {str(e)}")
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}:\n    {str(e)}")
         return False
+    try:
+        subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    except subprocess.CalledProcessError as e:
+        if verbose:
+            print(""*4+f"Failed to add immutable flag to {filename}:\n    {str(e)}")
+
     return True
 
 

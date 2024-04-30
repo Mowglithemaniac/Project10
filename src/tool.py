@@ -115,7 +115,7 @@ if __name__ == "__main__":
     if result == True:
         exit(0)
     elif result == False:
-        print("                          Something went wrong with implementing the .ini file")
+        print("                      Something went wrong with implementing the .ini file")
         print("                      \x1b[41mTerminating the program\x1b[0m")
         exit(1)
 
