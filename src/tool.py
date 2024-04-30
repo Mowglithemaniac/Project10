@@ -114,6 +114,11 @@ if __name__ == "__main__":
     result = AP_logic.ini_choice()
     if result == True:
         exit(0)
-# else:         # This is implied, and therefore does not need to be explicitly set
+    elif result == False:
+        print("                          Something went wrong with implementing the .ini file")
+        print("                      \x1b[41mTerminating the program\x1b[0m")
+        exit(1)
+
+# else:         # result = None, This is implied, and therefore does not need to be explicitly set
     AP_logic.logic_skeleton()
     

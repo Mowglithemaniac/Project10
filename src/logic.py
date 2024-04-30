@@ -195,7 +195,7 @@ class AP_Setup():
 
         # See if an ini_file was supplied
         if self.ini_file == None or self.ini_file == '':
-            ini_verified = False
+            return None
         else:
             print("\x1b[34m[?]\x1b[0m .ini file used  : "+ self.ini_file)
 
