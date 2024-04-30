@@ -25,6 +25,8 @@ Helper functions needed by logic.py
 - persistence_create(ip='',wifiname = [], verbose = False)
 + persistence_remove(verbose = False)
 ######### Update AP
+- is_valid_ip_address(ip='')
+- is_valid_range(range_from='', range_to='')
 - retrieve_ip_from_conf(verbose = False)
 - find_usable_ip(range_from ='', range_to='')
 - update_dnsmasq(settings = {}, verbose=False)
@@ -240,12 +242,13 @@ def ini_populate(settings = {}, verbose = False):
         While at it, verify the values as well.
     Details:
         Need to populate:
-        ssid           : str (random from p_names.txt)
-        range_from     : str 
-        range_to       : str 
-        channel        : str
-    Optional:
-        mac_address    : str
+        - ssid           : str (random from p_names.txt)
+        - range_from     : str 
+        - range_to       : str 
+        - channel        : str
+        Optional:
+        - mac_address    : str
+        - persistence    : str
     Return:
         New settings dictionary
     '''
@@ -254,6 +257,15 @@ def ini_populate(settings = {}, verbose = False):
     if settings['ssid'] == None:
         # Pick a random AP name
         settings['ssid'] = default_settings['ssid']
+
+    # Review mac address
+    if settings['mac_address'] != None:
+        if not is_valid_mac_address(settings['mac_address']):
+            settings['mac_address'] = None
+            if verbose:
+                print(" "*22+"The supplied mac address from the .ini file")
+                print(" "*22+"is not valid, and is therefore ignored")
+
     # Review channel
     if settings['channel'] == None:
         settings['channel'] = '1'
@@ -264,8 +276,8 @@ def ini_populate(settings = {}, verbose = False):
         '''
         try:
             channel = int(settings['channel'])
-            available = list(range(1, 11))
-            available.extend(range(34, 65, 4))
+            available = list(range(1, 12))
+#            available.extend(range(34, 65, 4))
 #            available.extend(range(100, 145, 4))
 #            available.extend(range(149, 166, 4))
             if not channel in set:
@@ -279,39 +291,20 @@ def ini_populate(settings = {}, verbose = False):
             Channel set incorrectly
             '''
             settings['channel'] = '1'
-
-    # Review mac address
-    if settings['mac_address'] != None:
-        if not is_valid_mac_address(settings['mac_address']):
-            settings['mac_address'] = None
-            if verbose:
-                print(" "*22+"The supplied mac address from the .ini file")
-                print(" "*22+"is not valid, and is therefore ignored")
-
+    
     # Review ranges, to and from.
-    acceptable_range = True
-    if settings['range_from'] != None and settings['range_to'] != None:
-        try:
-            ip_from = ipaddress.IPv4Address(settings['range_from'])
-            ip_to = ipaddress.IPv4Address(settings['range_to'])
-            if ip_from.packed[:3] != ip_to.packed[:3]:
-                acceptable_range = False
-                # Not the same /24 subnet (i.e. the first 3 octets are different)
-            else:
-                if max(int(ip_from) - int(ip_to)+1) > 5:
-                    # Sufficient range space, do nothing, other than notify
-                    # you the reader
-                    pass
-                else:
-                    acceptable_range = False
-        except:
-            acceptable_range = False
-    else:
-        acceptable_range = False
-    if acceptable_range == False:
+    if is_valid_range(settings['range_from'], settings['range_to']) == False:
         settings['range_from'] = default_settings['range_from']
         settings['range_to'] = default_settings['range_to']
-    
+
+    # Review persistence
+    if settings['persistence'] != None:
+        if settings['persistence'].lower() == "yes" or  settings['persistence'].lower() == "no":
+            # all is in order
+            pass
+        else:
+             settings['persistence'] = None
+
     return settings
 
 
@@ -364,6 +357,7 @@ def create_isolation(ip='', wifiname = '', verbose = False):
         except subprocess.CalledProcessError as e:
             if verbose:
                 print(" "*4+f"\x1b[41m[!] Error executing command\033[0m:\n"+" "*4+f"\x1b[35m{' '.join(command)}\033[0m\n    Error: {str(e)}")
+            return False
     return True
 
 
@@ -601,7 +595,73 @@ def persistence_remove(verbose = False):
 
 ######### 
 
+def is_valid_ip_address(ip=''):
+    '''
+    Purpose:
+        Check if the provided string is a valid IP address
+    Return:
+        Boolean, whether true or false
+    '''
+    # Regular expression for validating an IP address
+    pattern = re.compile(r"""
+    ^                           # start of string
+    (                           # start of group
+    [1-9]?[0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]  # matches 0-199, 100-199, 200-249, 250-255
+    )                           # end of group
+    \.                          # literal dot
+    (                           # start of group
+    [0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]  # matches 0-9, 10-99, 100-199, 200-249, 250-255
+    )                           # end of group
+    \.                          # literal dot
+    (                           # start of group
+    [0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]  # matches 0-9, 10-99, 100-199, 200-249, 250-255
+    )                           # end of group
+    \.                          # literal dot
+    (                           # start of group
+    [0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]  # matches 0-9, 10-99, 100-199, 200-249, 250-255
+    )                           # end of group
+    $                           # end of string
+    """, re.VERBOSE)
+    
+    return pattern.match(ip) is not None
+
+
+def is_valid_range(range_from='', range_to=''):
+    '''
+    Purpose
+        Determine if an ip range is valid
+    Return
+        True if valid
+        False if not valid
+    '''
+    acceptable_range = True
+    if range_from != None and range_to != None:
+        try:
+            ip_from = ipaddress.IPv4Address(range_from)
+            ip_to = ipaddress.IPv4Address(range_to)
+            if ip_from.packed[:3] != ip_to.packed[:3]:
+                acceptable_range = False
+                # Not the same /24 subnet (i.e. the first 3 octets are different)
+            else:
+                if max(int(ip_from) - int(ip_to)+1) > 5:
+                    # Sufficient range space, do nothing, other than notify
+                    # you the reader
+                    pass
+                else:
+                    acceptable_range = False
+        except:
+            acceptable_range = False
+    else:
+        acceptable_range = False
+    return acceptable_range
+
+
 def retrieve_ip_from_conf(verbose = False):
+    '''
+    Purpose
+        Read '/etc/dnsmasq.conf' and extract
+        the range.
+    '''
     filename = '/etc/dnsmasq.conf'
     if not os.path.exists(filename):
         # File does not exist
@@ -770,9 +830,21 @@ def update_ap(settings={}, wifiname='', verbose=False):
     status = update_dnsmasq(settings, wifiname, verbose)
     # Note: The verification that the settings['encryption']
     # is valid, i.e. != None or 'none' or 'wpa2' has been clarified at this stage
-    update_hostapd(settings, wifiname, settings['encryption'].lower(), verbose)
+    if status == False: 
+        return status
+    status = update_hostapd(settings, wifiname, settings['encryption'].lower(), verbose)
     ip = find_usable_ip(settings['range_from'], settings['range_to'])
-    create_isolation(ip, wifiname, verbose)
+    status = create_isolation(ip, wifiname, verbose)
+    if status == False: 
+            return status
+    
+    if settings['persistence'] != None and settings['persistence'].lower() == 'yes':
+        status = persistence_create(ip, wifiname, verbose)
+    if status == False:
+        print(" "*4+"Creation of persistence failed")
+    else:
+        print(" "*4+"Successfully created files for persistence")
+    return status
 
 
 ############# Isolation status of the machine.
@@ -808,7 +880,6 @@ if __name__ == "__main__":
 
     ip = find_usable_ip("10.10.10.100", "10.10.10.255")
     print(ip)
-
 
 
 
