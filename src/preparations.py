@@ -284,8 +284,9 @@ def persistence_status(files=[], verbose = False):
     '''
     Purpose:
         Check whether the files related to isolation exist
-        - /var/spool/cron/crontabs/root
-        - /root/isolation.sh
+        - /etc/cron.d/ap_persistence
+        - /root/create_ap.sh
+        - /root/firewall.sh
     Assumption:
         If the files exist, that the content is correct.
     '''

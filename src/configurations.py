@@ -43,6 +43,8 @@ def is_valid_mac_address(mac):
     Return:
         Boolean, whether true or false
     '''
+    if mac == None:
+        return False
     # Regular expression for validating a MAC address
     pattern = re.compile(r"""
     ^                           # start of string
@@ -299,11 +301,8 @@ def ini_populate(settings = {}, verbose = False):
 
     # Review persistence
     if settings['persistence'] != None:
-        if settings['persistence'].lower() == "yes" or  settings['persistence'].lower() == "no":
-            # all is in order
-            pass
-        else:
-             settings['persistence'] = None
+        if settings['persistence'].lower() != "yes":
+            settings['persistence'] = None
 
     return settings
 
@@ -343,7 +342,6 @@ def create_isolation(ip='', wifiname = '', verbose = False):
         ["sudo", "systemctl", "restart", "dnsmasq"]
     ]
 
-
     if verbose:
         print(" "*4+"Executing commands: (RED - Fail, GREEN - Success)")
     for command in commands:
@@ -373,6 +371,7 @@ def remove_isolation(verbose = False):
         ["sudo", "systemctl", "stop", "dnsmasq"],
         ["sudo", "systemctl", "mask", "hostapd"],
         ["sudo", "systemctl", "mask", "dnsmasq"],
+        ["sudo", "systemctl", "unmask", "wpa_supplicant"],
         ["sudo", "systemctl", "restart", "wpa_supplicant"],
         ["sudo", "systemctl", "restart", "NetworkManager"],
         ["sudo", "systemctl", "restart", "networking"]
@@ -415,7 +414,7 @@ def persistence_status(files = []):
     return status
 
 
-def persistence_create(ip='',wifiname = [], verbose = False):
+def persistence_create(ip='',wifiname = [], mac_address='', verbose = False):
     '''
     Purpose:
         Creating persistence on the machine
@@ -453,6 +452,8 @@ def persistence_create(ip='',wifiname = [], verbose = False):
                 return False
 
         os.remove(filename)  # Delete the file
+        if os.path.exists(filename):
+            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
         # Attempt to open the file to write
     try:
         #This will create the file
@@ -506,6 +507,8 @@ def persistence_create(ip='',wifiname = [], verbose = False):
                     print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
                 return False
         os.remove(filename)  # Delete the file
+        if os.path.exists(filename):
+            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
     # Attempt to open the file to write
     try:
         #This will create the file
@@ -516,8 +519,14 @@ def persistence_create(ip='',wifiname = [], verbose = False):
             file.write("sudo ip link set "+wifiname+"up\n")
             file.write("sudo systemctl unmask hostapd\n")
             file.write("sudo systemctl unmask dnsmasq\n")
+            file.write("sudo systemctl mask wpa_supplicant\n")
             file.write("sudo systemctl restart hostapd\n")
             file.write("sudo systemctl restart dnsmasq\n")
+            if is_valid_mac_address(mac_address):
+                file.write("sudo ip link set "+wifiname+" down")
+                file.write("sudo ip link set "+wifiname+" address "+ mac_address)
+                file.write("sudo ip link set "+wifiname+" up")
+
 ################ IF MAC SETTING, REMEMBER TO UP INCLUDE IT HERE
     except IOError as e:
         if verbose:
@@ -549,6 +558,8 @@ def persistence_create(ip='',wifiname = [], verbose = False):
                     print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
                 return False
         os.remove(filename)  # Delete the file
+        if os.path.exists(filename):
+            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
     # Attempt to open the file to write
     try:
         #This will create the file
@@ -737,16 +748,21 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
     '''
     filename = '/etc/dnsmasq.conf'
     flags = ['-i', '-e']
-    for flag in flags:
-        command = ['sudo', 'chattr', flag, filename]
-        try:
-            subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            if verbose:
-                print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-        except subprocess.CalledProcessError as e:
-            if verbose:
-                print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-            return False
+    if os.path.exists(filename):
+        for flag in flags:
+            command = ['sudo', 'chattr', flag, filename]
+            try:
+                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                if verbose:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+            except subprocess.CalledProcessError as e:
+                if verbose:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                return False
+        os.remove(filename)  # Delete the file
+        if os.path.exists(filename):
+            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
+
 
     try:
         #This will create the file
@@ -788,6 +804,10 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
                 if verbose:
                     print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
                 return False
+        os.remove(filename)  # Delete the file
+        if os.path.exists(filename):
+            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
+
     try:
         #This will create the file
         with open(filename, 'w') as file:
@@ -860,11 +880,13 @@ def update_ap(settings={}, wifiname='', verbose=False):
     if status == False: 
             return status
     
-    if settings['persistence'] != None and settings['persistence'].lower() == 'yes':
-        status = persistence_create(ip, wifiname, verbose)
+    if settings['persistence'] == None:
+        return status
+    if settings['persistence'].lower() == 'yes':
+        status = persistence_create(ip, wifiname, settings['mac_address'], verbose)
     if status == False:
         print(" "*4+"Creation of persistence failed")
-    else:
+    elif status == True:
         print(" "*4+"Successfully created files for persistence")
     return status
 
@@ -874,9 +896,10 @@ def update_ap(settings={}, wifiname='', verbose=False):
 # all traffic through the ethernet device
 ### Persistence of Isolation
 # Created via crontab, with the @reboot tag
-# File will be located at '/var/spool/cron/crontabs/root'
-# and an iptables file called isolation.sh
-# should be located at /root/isolation.sh
+# File will be located at '/etc/cron.d/ap_persistence'
+# and an iptables file called /root/firewall.sh
+# to isolate the machine. 
+# As well well as /root/create_ap.sh for AP initialization
 # This can verified by using a cat, and then
 # looking at the return code, to determine
 # whether it exist or not.

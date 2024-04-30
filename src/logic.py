@@ -62,12 +62,12 @@ class AP_Setup():
                     continue
             except ValueError:
                 print("Invalid input. Please enter a valid integer.")
-            if choice == 0:
+            if int(choice) == 0:
                 exit(0)
-            elif choice == 1:
+            elif int(choice) == 1:
                 print("Removing isolation")
                 configurations.remove_isolation(self.verbose)
-            elif choice == 2:
+            elif int(choice) == 2:
                 print("Disabling persistence")
                 persistence_files = ["/root/firewall.sh", "/root/create_ap.sh", "/etc/cron.d/ap_persistence"]
                 status = configurations.persistence_status(persistence_files)
@@ -75,7 +75,7 @@ class AP_Setup():
                     print("There is no persistence to remove.")
                     continue
                 configurations.persistence_remove(self.verbose)
-            elif choice == 3:
+            elif int(choice) == 3:
                 print("Creating persistence")
                 print("Note: It is assumed that the necessary AP configuration")
                 print("      files are already in place.")
@@ -92,92 +92,93 @@ class AP_Setup():
                     print("correctly configuring a dhcp server.")
                     continue
                 configurations.persistence_create(ip, self.wifiname, self.verbose)
-            elif choice == 4:
-                    # I hate you
-                    print("Manually updating the Access Point")
-                    print("Note: Only the encryption type is required.")
-                    print("      Based on that some additional requirements may appear")
-                    user_input = ''
-                    ### 1st step, encryption type
-                    user_input = input("REQUIRED: Which encryption do you want? (none/wpa2)\n")
-                    if user_input.lower() == 'none':
-                        settings['encryption'] = 'none'
-                    elif user_input.lower() == 'wpa2':
-                        settings['encryption'] = 'wpa2'
-                    else:
-                        print("Unknown choice, starting over")
-                        continue
-                    if settings["encryption"].lower() == 'wpa2':
-                        ### Step 1b, password
+            elif int(choice) == 4:
+                # I hate you
+                print("Manually updating the Access Point")
+                print("Note: Only the encryption type is required.")
+                print("      Based on that some additional requirements may appear")
+                user_input = ''
+                ### 1st step, encryption type
+                user_input = input("REQUIRED: Which encryption do you want? (none/wpa2)\n")
+                if user_input.lower() == 'none':
+                    settings['encryption'] = 'none'
+                elif user_input.lower() == 'wpa2':
+                    settings['encryption'] = 'wpa2'
+                else:
+                    print("Unknown choice, starting over")
+                    continue
+                if settings["encryption"].lower() == 'wpa2':
+                    ### Step 1b, password
 
-                        user_input = input("REQUIRED: Choose a password:\n")
-                        # Warning, this could cause issues
-                        settings["password"] = user_input
-                    ### Step 2, choose an ssid (Note max 31 characters in length)
-                    user_input = input("OPTIONAL: Choose a name for the AP (aka. ssid)\n")
-                    if len(user_input) == 0 or len(user_input) > 31:
-                        # Use a random name
-                        settings['ssid'] = default_settings['ssid']
-                        print(" "*10+"Using a randomized ssid: \""+default_settings['ssid']+"\"")
+                    user_input = input("REQUIRED: Choose a password:\n")
+                    # Warning, this could cause issues
+                    settings["password"] = user_input
+                ### Step 2, choose an ssid (Note max 31 characters in length)
+                user_input = input("OPTIONAL: Choose a name for the AP (aka. ssid)\n")
+                if len(user_input) == 0 or len(user_input) > 31:
+                    # Use a random name
+                    settings['ssid'] = default_settings['ssid']
+                    print(" "*10+"Using a randomized ssid: \""+default_settings['ssid']+"\"")
+                else:
+                    settings['ssid'] = user_input
+                ### Step 3, ip range
+                print("OPTIONAL: Select an ip range for the dhcp server")
+                user_input = input("          Enter the first IP of the range\n")
+                range_from = user_input
+                user_input = input("          Enter the last IP of the range\n")
+                range_to = user_input
+                if configurations.is_valid_ip_address(range_from) and configurations.is_valid_ip_address(range_to):
+                    if configurations.is_valid_range(range_from, range_to):
+                        print("    Valid range '"+range_from+"' to '"+range_to+"'")
                     else:
-                        settings['ssid'] = user_input
-                    ### Step 3, ip range
-                    print("OPTIONAL: Select an ip range for the dhcp server")
-                    user_input = input("          Enter the first IP of the range\n")
-                    range_from = user_input
-                    user_input = input("          Enter the last IP of the range\n")
-                    range_to = user_input
-                    if configurations.is_valid_ip_address(range_from) and configurations.is_valid_ip_address(range_to):
-                        if configurations.is_valid_range(range_from, range_to):
-                            print("    Valid range '"+range_from+"' to '"+range_to+"'")
-                        else:
-                            # Using default values
-                            print("    Invalid range, using default range of")
-                            print("    10.10.10.100 to 10.10.10.255")
-                            range_from = "10.10.10.100"
-                            range_to = "10.10.10.255"
-                    else: 
                         # Using default values
                         print("    Invalid range, using default range of")
                         print("    10.10.10.100 to 10.10.10.255")
                         range_from = "10.10.10.100"
                         range_to = "10.10.10.255"
+                else: 
+                    # Using default values
+                    print("    Invalid range, using default range of")
+                    print("    10.10.10.100 to 10.10.10.255")
+                    range_from = "10.10.10.100"
+                    range_to = "10.10.10.255"
 
-                    settings['range_from'] = range_from
-                    settings['range_to'] = range_to
-                    ### Step 4 channel
-                    user_input = input("OPTIONAL: Select a channel to use (1-11)")
-                    try:
-                        if 0 <= int(user_input) <= 11:
-                            settings['channel'] = user_input
-                            print("    Channel accepted")
-                        else:
-                            settings['channel'] = '1'
-                            print(" "*10+"Channel rejected, using default channel 1")
-                    except ValueError:
-                            settings['channel'] = '1'
-                            print(" "*10+"Channel rejected, using default channel 1")
+                settings['range_from'] = range_from
+                settings['range_to'] = range_to
+                ### Step 4 channel
+                user_input = input("OPTIONAL: Select a channel to use (1-11)")
+                try:
+                    if 0 <= int(user_input) <= 11:
+                        settings['channel'] = user_input
+                        print("    Channel accepted")
+                    else:
+                        settings['channel'] = '1'
+                        print(" "*10+"Channel rejected, using default channel 1")
+                except ValueError:
+                        settings['channel'] = '1'
+                        print(" "*10+"Channel rejected, using default channel 1")
             
-            print("="*25)
-            print("\x1b[34mAccess point activation\x1b[0m")
-            print(" "*4+"Settings used   :")
-            # Print each key-value pair with aligned values
-            max_key_length = max(len(key) for key in settings)
-            for key, value in settings.items():
-                if value != None:
-                    print(" "*22+f"{key.ljust(max_key_length)} | '{value}'")
-            print(" "*4+"Settings omitted:")
-            for key, value in settings.items():
-                if value == None:
-                    print(" "*22+f"{key.ljust(max_key_length)} | {value}")
-
-            result = configurations.update_ap(settings,self.wifiname, self.verbose)
-            if result:
-                print("Successfully setup an AP")
-            else:
-                print("Failed setting up an AP ")
-            ## End choice 4
-
+                print("="*25)
+                print("\x1b[34mAccess point activation\x1b[0m")
+                print(" "*4+"Settings used   :")
+                # Print each key-value pair with aligned values
+                max_key_length = max(len(key) for key in settings)
+                for key, value in settings.items():
+                    if value != None:
+                        print(" "*22+f"{key.ljust(max_key_length)} | '{value}'")
+                print(" "*4+"Settings omitted:")
+                for key, value in settings.items():
+                    if value == None:
+                        print(" "*22+f"{key.ljust(max_key_length)} | {value}")
+                result = configurations.update_ap(settings,self.wifiname, self.verbose)
+                if result:
+                    print("Successfully setup an AP")
+                else:
+                    print("Failed setting up an AP ")
+                ## End choice 4
+            else: # Choice not reckognized
+                print("Choice not reckognized")
+                continue
 
     def ini_choice(self):
         '''
@@ -255,7 +256,7 @@ class AP_Setup():
                 user_input = 'y'
                 print("Auto accept, implementing AP based on supplied settings")
             else:
-                user_input = input("Do you wish to proceed (Y/N)?")
+                user_input = input("Do you wish to proceed (Y/N)?\n")
             if user_input.lower() == 'y':
                 '''
                 Purpose:
@@ -287,8 +288,6 @@ class AP_Setup():
                         print(" "*22+f"{key.ljust(max_key_length)} | {value}")
 
                 result = configurations.update_ap(settings,self.wifiname, self.verbose)
-
-                ## TODO: REVIEW AND IMPLEMENT PERSISTENCE
 
                 return result
             else:
