@@ -736,16 +736,17 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
         Update the /etc/dnsmasq.conf file 
     '''
     filename = '/etc/dnsmasq.conf'
-    if os.path.exists(filename):
+    flags = ['-i', '-e']
+    for flag in flags:
+        command = ['chattr', flag, filename]
         try:
-            subprocess.run(['sudo', 'chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            subprocess.run(['sudo', 'chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
+            subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            if verbose:
+                print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
         except subprocess.CalledProcessError as e:
             if verbose:
-                print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
+                print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
             return False
-        os.remove(filename)  # Delete the file
 
     try:
         #This will create the file
@@ -774,14 +775,19 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
     '''
     filename = '/etc/hostapd/hostapd.conf'
     if os.path.exists(filename):
-        try:
-            subprocess.run(['sudo', 'chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        except subprocess.CalledProcessError as e:
-            if verbose:
-                print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
-            return False
-        os.remove(filename)  # Delete the file
 
+
+        flags = ['-i', '-e']
+        for flag in flags:
+            command = ['chattr', flag, filename]
+            try:
+                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                if verbose:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+            except subprocess.CalledProcessError as e:
+                if verbose:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                return False
     try:
         #This will create the file
         with open(filename, 'w') as file:
