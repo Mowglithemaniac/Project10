@@ -2,5 +2,4 @@ dnsmasq
 macchanger
 hostapd
 aircrack-ng
-dsafeqweq
-cdaasdf|sdf
+iptables

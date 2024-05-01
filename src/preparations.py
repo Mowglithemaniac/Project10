@@ -298,7 +298,7 @@ def persistence_status(files=[], verbose = False):
             missing_files.append(file)
             status = False
     if verbose:
-        print("\x1b[33m[?]\x1b[0m Persistence     : ", end='')
+        print("\x1b[34m[?]\x1b[0m Persistence     : ", end='')
 
     if status:
         print("Files in place")

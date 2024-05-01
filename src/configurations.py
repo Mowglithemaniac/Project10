@@ -8,9 +8,12 @@ import ipaddress
 
 '''
 Helper functions needed by logic.py
+######### File creation/deletion
+- safe_lock(filename='', verbose=False)
+- safe_delete(filename='', verbose=False)
 ######### 
 + is_valid_mac_address(mac)
-- change_mac(interface, new_mac)
+- change_mac(interface='', new_mac='', verbose=False)
 #########ini file
 + ini_exist(file_path="")
 + ini_default_settings(verbose = False)
@@ -34,6 +37,50 @@ Helper functions needed by logic.py
 - update_ap(settings={}, wifiname='', verbose=False)
 '''
 
+
+######### File creation/deletio
+def safe_lock(filename='', verbose=False):
+    #step 1a Change file metadata (attributes)
+    command = ['sudo', 'chattr', '+i', filename]
+    try:
+        # Make the file immutable
+        result =subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)  
+        if verbose:
+            if result.returncode == 0:
+                print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+            else:
+                print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+    except subprocess.CalledProcessError as e:
+        if verbose:
+            print(" "*4+f"\x1b[41m[!] Error executing command\033[0m:\n"+" "*4+f"\x1b[35m{' '.join(command)}\033[0m\n    Error: {str(e)}")
+        return False
+    return True
+
+
+def safe_delete(filename='', verbose=''):
+    if os.path.exists(filename):
+        flags = ['-i', '-e']
+        for flag in flags:
+            command = ['sudo', 'chattr', flag, filename]
+            try:
+                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                if verbose:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+            except subprocess.CalledProcessError as e:
+                if verbose:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                return False
+
+        os.remove(filename)  # Delete the file
+        if os.path.exists(filename):
+            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
+        # Attempt to open the file to write
+            return False
+    else:
+        return True
+    return True
+
+
 ######### MAC addresse
 
 def is_valid_mac_address(mac):
@@ -56,7 +103,7 @@ def is_valid_mac_address(mac):
     return pattern.match(mac) is not None    
 
 
-def change_mac(interface='', new_mac=''):
+def change_mac(interface='', new_mac='', verbose=False):
     '''
     Purpose:
         Changes the MAC address of a given network interface to a new MAC address.
@@ -71,23 +118,30 @@ def change_mac(interface='', new_mac=''):
     returncode = 0
     if not is_valid_mac_address(new_mac):
         return False
-    try:
-        # Bring down the network interface
-        result = subprocess.run(['sudo', 'ip', 'link', 'set', interface, 'down'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        returncode += result.returncode
-        # Change the MAC address
-        result = subprocess.run(['sudo', 'ip', 'link', 'set', interface, 'address', new_mac], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        returncode += result.returncode
 
-        # Bring up the network interface
-        result = subprocess.run(['sudo', 'ip', 'link', 'set', interface, 'up'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        returncode += result.returncode
-    except Exception as e:
-        print("")
-        return False
-    if result.returncode != 0:
-        print("Failed to change MAC address. Error was:")
-        print(result.stderr.decode())
+    commands = [
+        ['sudo', 'ip', 'link', 'set', interface, 'down'],
+        ['sudo', 'ip', 'link', 'set', interface, 'address', new_mac],
+        ['sudo', 'ip', 'link', 'set', interface, 'up']
+    ]
+    count = 0
+    for command in commands:
+        try:
+            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            if result.returncode != 0:
+                count += 1
+            if verbose:
+                if result.returncode == 0:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                else:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+        except subprocess.CalledProcessError as e:
+            if verbose:
+                print(" "*4+f"\x1b[41m[!] Error executing command\033[0m:\n"+" "*4+f"\x1b[35m{' '.join(command)}\033[0m\n    Error: {str(e)}")
+                count += 1
+            return False
+    if count > 0:
+        print(" "*4+"\x1b[31m[!]\033[0m Failed to change MAC address")
         return False
     print(" "*4+f"MAC address for {interface} changed to {new_mac}.")
     return True
@@ -150,15 +204,14 @@ def read_ini_config(file_path='', verbose=False):
         A settings dictionary, or None
     '''
     settings = {
-        'ssid': None,           # str
+        'ssid': None,           # str 'none'/'wpa2'
         'mac_address': None,    # str
         'encryption': None,     # str
         'password': None,       # str
         'range_from': None,     # str
         'range_to': None,       # str
         'channel': None,        # str
-        'persistence': None     # 'yes'/'no'
-
+        'persistence': None     # str 'yes'
     }
     
     config = configparser.ConfigParser()
@@ -342,8 +395,6 @@ def create_isolation(ip='', wifiname = '', verbose = False):
         ["sudo", "systemctl", "restart", "dnsmasq"]
     ]
 
-    if verbose:
-        print(" "*4+"Executing commands: (RED - Fail, GREEN - Success)")
     for command in commands:
         try:
             result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -376,8 +427,6 @@ def remove_isolation(verbose = False):
         ["sudo", "systemctl", "restart", "NetworkManager"],
         ["sudo", "systemctl", "restart", "networking"]
     ]
-    if verbose:
-        print(" "*4+"Executing commands: (RED - Fail, GREEN - Success)")
     for command in commands:
         try:
             result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -392,19 +441,25 @@ def remove_isolation(verbose = False):
 
 ######### Persistence
 
-def persistence_status(files = []):
+def persistence_status():
     '''
     Purpose:
         Check whether the files related to isolation exist
         - /root/firewall.sh
         - /root/create_ap.sh
-        - /etc/cron.d/ap_persistence
+        - ~~/etc/cron.d/ap_persistence~~
+        - /etc/systemd/system/ap_setup.service
     Assumption:
         If the files exist, that the content is correct.
     Return:
         True if the files needed for isolation is in place
         else return False
     '''
+    files=[
+        '/root/firewall.sh',
+        '/root/create_ap.sh',
+        '/etc/systemd/system/ap_setup.service'
+    ]
     status = True
 
     for file in files:
@@ -421,7 +476,8 @@ def persistence_create(ip='',wifiname = [], mac_address='', verbose = False):
         File(s) to create
         - /root/firewall.sh
         - /root/create_ap.sh
-        - /etc/cron.d/ap_persistence
+        - ~~/etc/cron.d/ap_persistence~~
+        - /etc/systemd/system/ap_setup.service
         Updating these are the responsibilites of other functions
         - hostapd.con
         - dnsmasq.conf
@@ -436,25 +492,9 @@ def persistence_create(ip='',wifiname = [], mac_address='', verbose = False):
 
     # Step 1, create files
     ## Step 1a /root/firewall.sh, if it exist delete it to create it anew
-    ## Make sure to change file attributes as well, chmod 700 $file, + chattr +i $file
+    ## Make sure to change file attributes as well, chmod 500 $file, + chattr +i $file
     filename = '/root/firewall.sh'
-    if os.path.exists(filename):
-        flags = ['-i', '-e']
-        for flag in flags:
-            command = ['sudo', 'chattr', flag, filename]
-            try:
-                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                if verbose:
-                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-            except subprocess.CalledProcessError as e:
-                if verbose:
-                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-                return False
-
-        os.remove(filename)  # Delete the file
-        if os.path.exists(filename):
-            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
-        # Attempt to open the file to write
+    safe_delete(filename, verbose)
     try:
         #This will create the file
         with open(filename, 'w') as file:
@@ -473,124 +513,122 @@ def persistence_create(ip='',wifiname = [], mac_address='', verbose = False):
             file.write(f"iptables -A FORWARD -i {wifiname} -j ACCEPT\n")
             file.write(f"iptables -A INPUT -o {wifiname} -j ACCEPT\n")
             file.write(f"iptables -A OUTPUT -o {wifiname} -j ACCEPT\n")
-            file.write(f"iptables -A FORWARD -o {wifiname} -j ACCEPT\n")
-            file.write("\n")
+            file.write(f"iptables -A FORWARD -o {wifiname} -j ACCEPT\n\n")
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}: {str(e)}")
         return False
-
-    #step 1a Change file metadata (permissions and attributes)
+    if verbose:
+        print(" "*4+"\x1b[34m[?]\x1b[0m Created file: \x1b[100m"+filename+"\x1b[0m")
     os.chmod(filename, 0o500)  # Make the script executable by the owner only
-    try:
-        # Make the file immutable
-        subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)  
-    except subprocess.CalledProcessError as e:
-        if verbose:
-            print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
-        return False
-
+    safe_lock(filename, verbose)
 
     # Step 1b, /root/reset_ap.sh
     ## If file exist, delete it
     filename = '/root/create_ap.sh'
-    if os.path.exists(filename):
-        flags = ['-i', '-e']
-        for flag in flags:
-            command = ['sudo', 'chattr', flag, filename]
-            try:
-                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                if verbose:
-                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-            except subprocess.CalledProcessError as e:
-                if verbose:
-                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-                return False
-        os.remove(filename)  # Delete the file
-        if os.path.exists(filename):
-            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
+    safe_delete(filename, verbose)
     # Attempt to open the file to write
     try:
         #This will create the file
         with open(filename, 'w') as file:
             file.write("sudo airmon-ng check kill\n")
-            file.write("sudo ip link set "+wifiname+"down\n")
+            file.write("sudo ip link set "+wifiname+" down\n")
             file.write("sudo ip addr add "+f"{ip}/24 dev "+wifiname+"\n")
-            file.write("sudo ip link set "+wifiname+"up\n")
+            file.write("sudo ip link set "+wifiname+" up\n")
             file.write("sudo systemctl unmask hostapd\n")
             file.write("sudo systemctl unmask dnsmasq\n")
             file.write("sudo systemctl mask wpa_supplicant\n")
             file.write("sudo systemctl restart hostapd\n")
             file.write("sudo systemctl restart dnsmasq\n")
             if is_valid_mac_address(mac_address):
-                file.write("sudo ip link set "+wifiname+" down")
-                file.write("sudo ip link set "+wifiname+" address "+ mac_address)
-                file.write("sudo ip link set "+wifiname+" up")
-
-################ IF MAC SETTING, REMEMBER TO UP INCLUDE IT HERE
+                file.write("sudo ip link set "+wifiname+" down\n")
+                file.write("sudo ip link set "+wifiname+" address "+ mac_address+"\n")
+                file.write("sudo ip link set "+wifiname+" up\n")
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}:\n    {str(e)}")
         return False
 
     #step 1b Change file metadata (permissions and attributes)
+    if verbose:
+        print(" "*4+"\x1b[34m[?]\x1b[0m Created file: \x1b[100m"+filename+"\x1b[0m")
     os.chmod(filename, 0o500)  # Make the script executable by the owner only
-    try:
-        subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)  # Make the file immutable
-    except subprocess.CalledProcessError as e:
-        if verbose:
-            print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
-        return False
 
-    # Step 1c, /etc/cron.d/ap_persistence
+    safe_lock(filename, verbose)
+
+#    # Step 1c, /etc/cron.d/ap_persistence
+#    ## If file exist, delete it
+#    filename = '/etc/cron.d/ap_persistence'
+#    safe_delete(filename, verbose)
+#
+#    # Using cron, attempt failed. File location: /etc/cron.d/ap_persistence
+#    try:
+#        #This will create the file
+#        with open(filename, 'w') as file:
+#            file.write("## Settings for persistence, may require a full PATH\n")
+#            file.write("## And SHELL, like this:\n")
+#            file.write("# SHELL=/bin/sh\n")
+#            file.write("## Grap your current PATH and insert it\n")
+#            file.write("# PATH=...\n\n")
+##            PATH= os.environ.get('PATH') 
+##            file.write("# PATH="+f"{PATH}\"\n\n")
+#            file.write("@reboot root /bin/sh /root/firewall.sh\n")
+#            file.write("@reboot root /bin/sh /root/reset_ap.sh\n")
+#    except IOError as e:
+#        if verbose:
+#            print(f"    Failed to write to {filename}: {str(e)}")
+#        return False
+
+#    # Step 1c, 2nd attempt /etc/systemd/system/ap_setup.service
     ## If file exist, delete it
-    filename = '/etc/cron.d/ap_persistence'
-    if os.path.exists(filename):
-        flags = ['-i', '-e']
-        for flag in flags:
-            command = ['sudo', 'chattr', flag, filename]
-            try:
-                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                if verbose:
-                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-            except subprocess.CalledProcessError as e:
-                if verbose:
-                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-                return False
-        os.remove(filename)  # Delete the file
-        if os.path.exists(filename):
-            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
-    # Attempt to open the file to write
+    filename = '/etc/systemd/system/ap_setup.service'
+
+    safe_delete(filename, verbose)
+
     try:
         #This will create the file
         with open(filename, 'w') as file:
-            file.write("## Settings for persistence, may require a full PATH\n")
-            file.write("## And SHELL, like this:\n")
-            file.write("# SHELL=/bin/sh\n")
-            file.write("## Grap your current PATH and insert it\n")
-            file.write("# PATH=...\n\n")
-#            PATH= os.environ.get('PATH') 
-#            file.write("# PATH="+f"{PATH}\"\n\n")
-            file.write("@reboot root /bin/sh /root/firewall.sh\n")
-            file.write("@reboot root /bin/sh /root/reset_ap.sh\n")
+            file.write("[Unit]\n")
+            file.write("Description=Setup AP at boot after network and hostapd are ready\n")
+            file.write("After=network.target\n\n")
+            file.write("\n")
+            file.write("[Service]\n")
+            file.write("Type=oneshot\n")
+            file.write("ExecStart=/bin/bash -c '/root/create_ap.sh; /root/firewall.sh'\n")
+            file.write("RemainAfterExit=No\n\n")
+            file.write("[Install]\n")
+            file.write("WantedBy=multi-user.target\n")
+
     except IOError as e:
         if verbose:
             print(f"    Failed to write to {filename}: {str(e)}")
         return False
 
     #step 1c Change file metadata (permissions and attributes)
-    os.chmod(filename, 0o500)  # Make the script executable by the owner only
-    try:
-        # Make the file immutable
-        subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    except subprocess.CalledProcessError as e:
-        if verbose:
-            print(" "*4+f"Failed to set immutable flag on {filename}:\n    {str(e)}")
+    if verbose:
+        print(" "*4+"\x1b[34m[?]\x1b[0m Created file: \x1b[100m"+filename+"\x1b[0m")
+    os.chmod(filename, 0o744)  # Make the script executable by the owner only
+
+    if not safe_lock(filename, verbose):
         return False
 
+    commands = [
+        ["sudo", "systemctl", "daemon-reload"],
+        ["sudo", "systemctl", "enable", "ap_setup.service"],
+        ["sudo", "systemctl", "start", "ap_setup.service"]
+    ]
+    for command in commands:
+        try:
+            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            if verbose:
+                if result.returncode == 0:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                else:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+        except subprocess.CalledProcessError as e:
+            if verbose:
+                print(" "*4+f"\x1b[41m[!] Error executing command\033[0m:\n"+" "*4+f"\x1b[35m{' '.join(command)}\033[0m\n    Error: {str(e)}")
     return True
-
-
 
 def persistence_remove(verbose = False):
     '''
@@ -600,22 +638,50 @@ def persistence_remove(verbose = False):
         True if success
         False if failure
     '''
-
-    persistence_files = ['/root/firewall.sh', '/root/create_ap.sh', '/etc/cron.d/ap_persistence']
-
-    for filename in persistence_files:
-        if os.path.exists(filename):
-            try:
-                subprocess.run(['sudo', 'chattr', '-i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            except subprocess.CalledProcessError as e:
-                if verbose:
-                    print(""*4+f"Failed to remove immutable flag from {filename}:\n    {str(e)}")
-                return False
-            os.remove(filename)  # Delete the file
-        else:
+    # Stop and disable the service, before removing the associated files
+    commands = [
+        ["sudo", "systemctl", "stop", "ap_setup.service"],
+        ["sudo", "systemctl", "disable", "ap_setup.service"]
+    ]      
+    
+    for command in commands:
+        try:
+            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             if verbose:
-                print(""*4+f"'{filename}' does not exist and can therefore not be removed")
+                if result.returncode == 0:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                else:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+        except subprocess.CalledProcessError as e:
+            if verbose:
+                print(" "*4+f"\x1b[41m[!] Error executing command\033[0m:\n"+" "*4+f"\x1b[35m{' '.join(command)}\033[0m\n    Error: {str(e)}")
+
+    # Delete associated files used in persistence
+    persistence_files = ['/root/firewall.sh', '/root/create_ap.sh', '/etc/systemd/system/ap_setup.service']
+    for filename in persistence_files:
+        safe_delete(filename, verbose)
+
+    #reload systemd
+    commands = [
+        ["sudo", "systemctl", "daemon-reload"],
+        ["sudo", "systemctl", "reset-failed"]
+    ]
+
+    for command in commands:
+        try:
+            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            if verbose:
+                if result.returncode == 0:
+                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+                else:
+                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
+        except subprocess.CalledProcessError as e:
+            if verbose:
+                print(" "*4+f"\x1b[41m[!] Error executing command\033[0m:\n"+" "*4+f"\x1b[35m{' '.join(command)}\033[0m\n    Error: {str(e)}")
     return True
+    ## WARNING, UNKNOWN IF IPTABLE RULES PERSIST AFTER REBOOT
+    ## IF THAT IS THE CASE, A 'sudo iptables -F' COMMAND
+    ## MAY BE REQUIRED AT STARTUP
 
 ######### 
 
@@ -701,8 +767,8 @@ def retrieve_ip_from_conf(verbose = False):
                     if len(parts) == 2:
                         ip_range = parts[1].split(",")
                         if len(ip_range) == 3:
-                            ip_from = ip_range[0]
-                            ip_to = ip_range[1]
+                            range_from = ip_range[0]
+                            range_to = ip_range[1]
                             break  # Stop searching after finding the first dhcp-range
     except Exception as e:
         print(f"Error: {e}")
@@ -711,7 +777,7 @@ def retrieve_ip_from_conf(verbose = False):
     return None
 
 
-def find_usable_ip(range_from ='', range_to=''):
+def find_usable_ip(range_from ='', range_to='', verbose=False):
     '''
     Purpose
         Find a usable IP which the interface
@@ -747,21 +813,8 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
         Update the /etc/dnsmasq.conf file 
     '''
     filename = '/etc/dnsmasq.conf'
-    flags = ['-i', '-e']
-    if os.path.exists(filename):
-        for flag in flags:
-            command = ['sudo', 'chattr', flag, filename]
-            try:
-                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                if verbose:
-                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-            except subprocess.CalledProcessError as e:
-                if verbose:
-                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-                return False
-        os.remove(filename)  # Delete the file
-        if os.path.exists(filename):
-            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
+    if not safe_delete(filename, verbose):
+        return False
 
 
     try:
@@ -782,7 +835,12 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
     except subprocess.CalledProcessError as e:
         if verbose:
             print(""*4+f"Failed to add immutable flag to {filename}:\n    {str(e)}")
+    if verbose:
+            print(" "*4+"\x1b[34m[?]\x1b[0m Created file: \x1b[100m"+filename+"\x1b[0m")
+    safe_lock(filename, verbose)
+
     return True
+
 
 def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
     '''
@@ -790,24 +848,8 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
         Update the /etc/hostapd/hostapd.conf file 
     '''
     filename = '/etc/hostapd/hostapd.conf'
-    if os.path.exists(filename):
-
-
-        flags = ['-i', '-e']
-        for flag in flags:
-            command = ['sudo', 'chattr', flag, filename]
-            try:
-                subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                if verbose:
-                    print(" "*4+"\x1b[32m[+]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-            except subprocess.CalledProcessError as e:
-                if verbose:
-                    print(" "*4+"\x1b[31m[!]\033[0m "+f"\x1b[35m{' '.join(command)}\033[0m")
-                return False
-        os.remove(filename)  # Delete the file
-        if os.path.exists(filename):
-            print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
-
+    if not safe_delete(filename, verbose):
+        return False
     try:
         #This will create the file
         with open(filename, 'w') as file:
@@ -840,11 +882,9 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
         if verbose:
             print(f"    Failed to write to {filename}:\n    {str(e)}")
         return False
-    try:
-        subprocess.run(['sudo', 'chattr', '+i', filename], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    except subprocess.CalledProcessError as e:
-        if verbose:
-            print(""*4+f"Failed to add immutable flag to {filename}:\n    {str(e)}")
+    safe_lock(filename, verbose)
+    if verbose:
+        print(" "*4+"\x1b[34m[?]\x1b[0m Created file: \x1b[100m"+filename+"\x1b[0m")
 
     return True
 
@@ -862,7 +902,7 @@ def update_ap(settings={}, wifiname='', verbose=False):
     '''
 
     # Updating mac_address / Easy to do
-    if change_mac(wifiname, settings['mac_address']):
+    if change_mac(wifiname, settings['mac_address'], verbose):
         # mac change was successfull
         pass
     else:
@@ -870,10 +910,10 @@ def update_ap(settings={}, wifiname='', verbose=False):
         pass
 
     status = update_dnsmasq(settings, wifiname, verbose)
-    # Note: The verification that the settings['encryption']
-    # is valid, i.e. != None or 'none' or 'wpa2' has been clarified at this stage
     if status == False: 
         return status
+    # Note: The verification that the settings['encryption']
+    # is valid, i.e. != None or 'none' or 'wpa2' has been clarified at this stage
     status = update_hostapd(settings, wifiname, settings['encryption'].lower(), verbose)
     ip = find_usable_ip(settings['range_from'], settings['range_to'])
     status = create_isolation(ip, wifiname, verbose)
@@ -925,6 +965,7 @@ if __name__ == "__main__":
 
     ip = find_usable_ip("10.10.10.100", "10.10.10.255")
     print(ip)
+    print(retrieve_ip_from_conf(True))
 
 
 

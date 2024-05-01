@@ -69,8 +69,7 @@ class AP_Setup():
                 configurations.remove_isolation(self.verbose)
             elif int(choice) == 2:
                 print("Disabling persistence")
-                persistence_files = ["/root/firewall.sh", "/root/create_ap.sh", "/etc/cron.d/ap_persistence"]
-                status = configurations.persistence_status(persistence_files)
+                status = configurations.persistence_status()
                 if status == False:
                     print("There is no persistence to remove.")
                     continue
@@ -85,13 +84,13 @@ class AP_Setup():
                 print("      accounted for once persistence have been set.")
                 # Time to get the range_from and range_to from the /etc/dnsmasq.conf file
                 # and then by extension an IP which can be used
-                ip = configurations.find_usable_ip(self.verbose)
+                ip = configurations.retrieve_ip_from_conf(self.verbose)
                 if ip == None:
                     print("Unable to create persistence, as it was not possible")
                     print("to retrive a range, to generate a static IP needed for")
                     print("correctly configuring a dhcp server.")
                     continue
-                configurations.persistence_create(ip, self.wifiname, self.verbose)
+                configurations.persistence_create(ip, self.wifiname, '', self.verbose)
             elif int(choice) == 4:
                 # I hate you
                 print("Manually updating the Access Point")
@@ -179,6 +178,8 @@ class AP_Setup():
             else: # Choice not reckognized
                 print("Choice not reckognized")
                 continue
+            print("="*25)
+
 
     def ini_choice(self):
         '''
@@ -286,11 +287,12 @@ class AP_Setup():
                 for key, value in settings.items():
                     if value == None:
                         print(" "*22+f"{key.ljust(max_key_length)} | {value}")
-
+                if self.verbose:
+                    print(" "*4+"Executing commands: (\x1b[31mRED\033[0m - Fail, \x1b[32mGREEN\033[0m - Success, \x1b[34mBLUE\033[0m - Info)")
                 result = configurations.update_ap(settings,self.wifiname, self.verbose)
-
                 return result
             else:
+                print("\x1b[34m[?]\x1b[0m Choice not understood")
                 return False
         else:
             # Something went wrong with the .ini file
