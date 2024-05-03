@@ -76,6 +76,8 @@ def safe_delete(filename='', verbose=''):
             print(" "*4+"\x1b[41mError\x1b[0m unable to delete '"+filename+"' before recreation")
         # Attempt to open the file to write
             return False
+        if verbose:
+            print(" "*4+"\x1b[34m[?]\x1b[0m Deleted file: \x1b[100m"+filename+"\x1b[0m")
     else:
         return True
     return True
@@ -143,7 +145,7 @@ def change_mac(interface='', new_mac='', verbose=False):
     if count > 0:
         print(" "*4+"\x1b[31m[!]\033[0m Failed to change MAC address")
         return False
-    print(" "*4+f"MAC address for {interface} changed to {new_mac}.")
+    print(" "*4+f"\x1b[34m[?]\x1b[0m MAC address for {interface} changed to {new_mac}.")
     return True
 
 

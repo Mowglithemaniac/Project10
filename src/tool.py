@@ -93,6 +93,9 @@ if __name__ == "__main__":
         print("    \x1b[41mTerminating the program\x1b[0m\n")        
         exit(1)
 
+    if os.geteuid() != 1:
+        print("    \x1b[41mPlease rerun this progam using root priveleges\x1b[0m\n")
+        exit(1)
 
 ####################################
     print("="*25)
