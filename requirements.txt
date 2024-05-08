@@ -1,5 +1,4 @@
 dnsmasq
-macchanger
 hostapd
 aircrack-ng
 iptables
