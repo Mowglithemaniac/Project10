@@ -943,6 +943,8 @@ def update_ap(settings={}, wifiname='', verbose=False):
     # Note: The verification that the settings['encryption']
     # is valid, i.e. != None or 'none' or 'wpa1' has been clarified at this stage
     status = update_hostapd(settings, wifiname, settings['encryption'].lower(), verbose)
+    if status == False: 
+            return status
     ip = find_usable_ip(settings['range_from'], settings['range_to'])
     status = create_isolation(ip, wifiname, verbose)
     if status == False: 

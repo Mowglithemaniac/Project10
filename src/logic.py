@@ -99,15 +99,17 @@ class AP_Setup():
                 user_input = ''
 
                 ### 1st step, encryption type
-                user_input = input("REQUIRED: Which encryption do you want? (none/wpa2)\n")
+                user_input = input("REQUIRED: Which encryption do you want? (none/wpa1/wpa2)\n")
                 if user_input.lower() == 'none':
                     settings['encryption'] = 'none'
                 elif user_input.lower() == 'wpa1':
                     settings['encryption'] = 'wpa1'
+                elif user_input.lower() == 'wpa2':
+                    settings['encryption'] = 'wpa2'
                 else:
                     print("Unknown choice, starting over")
                     continue
-                if settings["encryption"].lower() == 'wpa1':
+                if settings["encryption"].lower() == 'wpa1' or settings["encryption"].lower() == 'wpa2':
                     ### Step 1b, password
                     user_input = input("REQUIRED: Choose a password:\n")
                     # Warning, this could cause issues
