@@ -29,8 +29,8 @@ class AP_Setup():
     def logic_skeleton(self):
         '''
         Purpose:
-            Acts as a skeleton, for the logic
-            tying it together, and deciding
+            Acts as a skeleton, for the user input
+            logic tying it together, and deciding
             upon what to implement and how        
         '''
 
@@ -97,21 +97,22 @@ class AP_Setup():
                 print("Note: Only the encryption type is required.")
                 print("      Based on that some additional requirements may appear")
                 user_input = ''
+
                 ### 1st step, encryption type
                 user_input = input("REQUIRED: Which encryption do you want? (none/wpa2)\n")
                 if user_input.lower() == 'none':
                     settings['encryption'] = 'none'
-                elif user_input.lower() == 'wpa2':
-                    settings['encryption'] = 'wpa2'
+                elif user_input.lower() == 'wpa1':
+                    settings['encryption'] = 'wpa1'
                 else:
                     print("Unknown choice, starting over")
                     continue
-                if settings["encryption"].lower() == 'wpa2':
+                if settings["encryption"].lower() == 'wpa1':
                     ### Step 1b, password
-
                     user_input = input("REQUIRED: Choose a password:\n")
                     # Warning, this could cause issues
                     settings["password"] = user_input
+
                 ### Step 2, choose an ssid (Note max 31 characters in length)
                 user_input = input("OPTIONAL: Choose a name for the AP (aka. ssid)\n")
                 if len(user_input) == 0 or len(user_input) > 31:
@@ -169,6 +170,8 @@ class AP_Setup():
                 for key, value in settings.items():
                     if value == None:
                         print(" "*22+f"{key.ljust(max_key_length)} | {value}")
+                
+                # Creating the AP
                 result = configurations.update_ap(settings,self.wifiname, self.verbose)
                 if result:
                     print("Successfully setup an AP")
@@ -184,7 +187,10 @@ class AP_Setup():
     def ini_choice(self):
         '''
         Purpose:
-            Review the .ini file status 
+            Was a .ini file supplied, if so, review the file
+            Does it exist, is it correctly formatted,
+            can an ap be created from those settings.
+            Finally implement it.
         Return:
             True if changes requiring the restart/setup
                  of hostapd/dnsmasq were made

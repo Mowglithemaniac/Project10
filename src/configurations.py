@@ -276,6 +276,18 @@ def determine_ini_ap_type(settings = {}, verbose = False):
             - channel
         '''
         return 'none'
+    elif variable.lower() == "wpa1":
+        '''
+        Required: 
+            - encryption : wpa1
+            - password
+        '''
+        if settings.get('password', None) != None:
+            return 'wpa1'
+        elif verbose:
+            print(" "*22+"WPA1 has been chosen in the .ini file,")
+            print(" "*22+"but a password was not supplied.")
+            print(" "*22+"Therefore the .ini file is \x1b[5;34;41mREJECTED\x1b[0m")
     elif variable.lower() == "wpa2":
         '''
         Required: 
@@ -588,7 +600,7 @@ def persistence_create(ip='',wifiname = [], mac_address='', verbose = False):
     safe_delete(filename, verbose)
 
     try:
-        #This will create the file
+        #This will create the daemon service file
         with open(filename, 'w') as file:
             file.write("[Unit]\n")
             file.write("Description=Setup AP at boot after network and hostapd are ready\n")
@@ -860,7 +872,7 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
                 file.write(f"channel={settings['channel']}\n")
                 file.write(f"interface={wifiname}\n")
                 file.write(f"ssid={settings['ssid']}\n")
-            elif ap_type.lower() == 'wpa2':
+            elif ap_type.lower() == 'wpa1':
                 file.write(f"interface={wifiname}\n")
                 file.write('driver=nl80211\n')
                 file.write(f"ssid={settings['ssid']}\n")
@@ -872,10 +884,24 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
                 file.write('auth_algs=1\n')
                 file.write('ignore_broadcast_ssid=0\n')
                 file.write('wpa=3\n')
-                file.write('wpa_passphrase=password\n')
+                file.write(f"wpa_passphrase={settings['password']}\n")
                 file.write('wpa_key_mgmt=WPA-PSK\n')
                 file.write('wpa_pairwise=TKIP\n')
                 file.write('rsn_pairwise=CCMP\n')
+            elif ap_type.lower() == 'wpa2':
+                file.write(f"interface={wifiname}\n")
+                file.write('driver=nl80211\n')
+                file.write(f"ssid={settings['ssid']}\n")
+                file.write('hw_mode=g\n')
+                file.write(f"channel={settings['channel']}\n")
+                file.write('ieee80211n=1\n')
+                file.write('ieee80211ac=1\n')
+                file.write('wmm_enabled=1\n')
+                file.write('auth_algs=1\n')
+                file.write('wpa=2\n')
+                file.write('wpa_key_mgmt=WPA-PSK\n')
+                file.write('wpa_pairwise=CCMP\n')
+                file.write('wpa_passphrase=YourPassphrase\n')
             else:
                 #This is where ap expansions would be
                 print("Something went wrong\nIf the code ever executes this line, terminating program")
@@ -915,7 +941,7 @@ def update_ap(settings={}, wifiname='', verbose=False):
     if status == False: 
         return status
     # Note: The verification that the settings['encryption']
-    # is valid, i.e. != None or 'none' or 'wpa2' has been clarified at this stage
+    # is valid, i.e. != None or 'none' or 'wpa1' has been clarified at this stage
     status = update_hostapd(settings, wifiname, settings['encryption'].lower(), verbose)
     ip = find_usable_ip(settings['range_from'], settings['range_to'])
     status = create_isolation(ip, wifiname, verbose)
@@ -974,7 +1000,7 @@ if __name__ == "__main__":
 ############# supported .ini settings
 # 'ssid'          : str 
 # 'mac_address'   : str 
-# 'encryption'    : str 'none'/'wpa2'
+# 'encryption'    : str 'none'/'wpa1'
 # 'password'      : str 
 # 'range_from'    : str 
 # 'range_to'      : str 
@@ -994,7 +1020,7 @@ interface=[WIFINAME]
 ssid=[AP_NAME]
 '''
 
-# wpa/wpa2
+# wpa1
 '''
 # change wlan0 to your wireless device
 interface=[WIFINAME]
@@ -1006,17 +1032,35 @@ channel=[NUMBER]
 wme_enabled=1
 ieee80211n=1
 
-# WPA and WPA2
 macaddr_acl=0
 auth_algs=1
 ignore_broadcast_ssid=0
-wpa=3
+wpa=3                       # WPA and WPA2
 wpa_passphrase=password
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP
 '''
 
+
+# wpa2
+'''
+interface=[WIFINAME]           # Name of the WiFi interface we are configuring
+driver=nl80211                 # Use the nl80211 driver with the modern Linux kernel
+ssid=[AP_NAME]                 # Set your desired network name (SSID)
+hw_mode=g                      # Set the hardware mode to 802.11g, you can also use a, b, or n
+channel=[CHANNEL]              # Set the channel you want to use
+ieee80211n=1                   # Enable 802.11n (HT)
+ieee80211ac=1                  # Enable 802.11ac (VHT), if supported
+wmm_enabled=1                  # Enable WMM for QoS
+
+# Security configuration for WPA2 Personal
+auth_algs=1                    # 1=wpa, 2=wep, 3=both
+wpa=2                          # Use WPA2 only
+wpa_key_mgmt=WPA-PSK           # Key management
+wpa_pairwise=CCMP              # Use CCMP encryption (AES, for WPA2)
+wpa_passphrase=YourPassphrase  # Set the WPA2 passphrase
+'''
 
 ############# dnsmasq conf file, for dhcp
 # Remember to change [WIFINAME], [IP_FROM], [IP_TO]
