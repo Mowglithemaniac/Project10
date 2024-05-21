@@ -1,7 +1,6 @@
 import argparse
 import os
-import subprocess
-import sys
+
 
 # Additional files
 import preparations
