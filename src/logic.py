@@ -110,10 +110,11 @@ class AP_Setup():
                     print("Unknown choice, starting over")
                     continue
                 if settings["encryption"].lower() == 'wpa1' or settings["encryption"].lower() == 'wpa2':
-                    ### Step 1b, password
                     user_input = input("REQUIRED: Choose a password:\n")
                     # Warning, this could cause issues
                     settings["password"] = user_input
+                    if settings["password"] == '':
+                        print(" "*4+"A password was not supplied, terminating program\x1b[5;34;41mterminating program\x1b[0m\n")
 
                 ### Step 2, choose an ssid (Note max 31 characters in length)
                 user_input = input("OPTIONAL: Choose a name for the AP (aka. ssid)\n")
@@ -159,7 +160,19 @@ class AP_Setup():
                 except ValueError:
                         settings['channel'] = '1'
                         print(" "*10+"Channel rejected, using default channel 1")
-            
+
+                ### Step 5 mac address
+                user_input = input("OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E")
+                try:
+                    if configurations.is_valid_mac_address(user_input):
+                        settings['mac_address'] = user_input
+                        print("    Mac address accepted")
+                    else:
+                        print("    Mac address rejected")
+                except ValueError:
+                        print(" "*4+"Mac address rejected")
+
+
                 print("="*25)
                 print("\x1b[34mAccess point activation\x1b[0m")
                 print(" "*4+"Settings used   :")

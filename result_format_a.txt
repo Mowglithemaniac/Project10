@@ -1,0 +1,1508 @@
+??????????????????????????????????????????????????
+Test test_files/test9a01.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a01.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'bogus'
+Variable set to None
+ini file failed. Unable to determine AP type
+[34m[?][0m .ini file       : Not used
+                      Something went wrong with implementing the .ini file
+                      [41mTerminating the program[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a02.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a02.ini
+                      File exists
+    Settings loaded :
+                      encryption  | 'none'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a03.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a03.ini
+                      File exists
+    Settings loaded :
+                      encryption  | 'wpa1'
+                      password    | 'password123'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'The Verse Coverage'
+                      encryption  | 'wpa1'
+                      password    | 'password123'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a04.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a04.ini
+                      File exists
+    Settings loaded :
+                      encryption  | 'wpa2'
+                      password    | 'password123'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'Super Troopers Wi-Fi'
+                      encryption  | 'wpa2'
+                      password    | 'password123'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a05.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a05.ini
+                      File exists
+    Settings loaded :
+                      encryption  | 'bogus'
+                      password    | 'password123'
+ini file failed. Unable to determine AP type
+[34m[?][0m .ini file       : Not used
+                      Something went wrong with implementing the .ini file
+                      [41mTerminating the program[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a06.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a06.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a07.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a07.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network with a much too long name that should most certainly not fit, so for good measure we are writing a bunch of extra crap just in case'
+                      mac_address | '00:1A:2B:3C:4D:5E'
+                      encryption  | 'none'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'Mal's Cargo Hold'
+                      mac_address | '00:1A:2B:3C:4D:5E'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [32m[+][0m [35msudo ip link set wlan0 address 00:1A:2B:3C:4D:5E[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [34m[?][0m MAC address for wlan0 changed to 00:1A:2B:3C:4D:5E.
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a08.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a08.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      mac_address | '00:1A:2B:3C:4D:5E'
+                      encryption  | 'none'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      mac_address | '00:1A:2B:3C:4D:5E'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [32m[+][0m [35msudo ip link set wlan0 address 00:1A:2B:3C:4D:5E[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [34m[?][0m MAC address for wlan0 changed to 00:1A:2B:3C:4D:5E.
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a09.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a09.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      mac_address | 'sdfadsf'
+                      encryption  | 'none'
+                      The supplied mac address from the .ini file
+                      is not valid, and is therefore ignored
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a10.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a10.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.10'
+                      range_to    | '10.10.10.255'
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.10'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.11/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a11.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a11.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '150.10.10.10'
+                      range_to    | '150.10.10.255'
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '150.10.10.10'
+                      range_to    | '150.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 150.10.10.11/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a12.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a12.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | 'asdfads'
+                      range_to    | '150.10.10.255'
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a13.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a13.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '150.10.10.0'
+                      range_to    | 'asdfads'
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a14.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a14.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '150.10.10.255'
+                      range_to    | '150.10.10.0'
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a15.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a15.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.0'
+                      range_to    | '150.10.10.255'
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a16.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a16.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      channel     | '1'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a17.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a17.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      channel     | '7'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '7'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a18.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a18.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      channel     | '30'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+
+??????????????????????????????????????????????????
+Test test_files/test9a19.ini
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m .ini file used  : test_files/test9a19.ini
+                      File exists
+    Settings loaded :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      channel     | 'bogus'
+False
+Ready to implement!
+Auto accept, implementing AP based on supplied settings
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    Executing commands: ([31mRED[0m - Fail, [32mGREEN[0m - Success, [34mBLUE[0m - Info)
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+
+

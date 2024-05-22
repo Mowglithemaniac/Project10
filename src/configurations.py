@@ -326,6 +326,10 @@ def ini_populate(settings = {}, verbose = False):
     if settings['ssid'] == None:
         # Pick a random AP name
         settings['ssid'] = default_settings['ssid']
+    elif len(settings['ssid']) == 0:
+        settings['ssid'] = default_settings['ssid']
+    elif 32 < len(settings['ssid']):
+        settings['ssid'] = default_settings['ssid']
 
     # Review mac address
     if settings['mac_address'] != None:
@@ -349,7 +353,7 @@ def ini_populate(settings = {}, verbose = False):
 #            available.extend(range(34, 65, 4))
 #            available.extend(range(100, 145, 4))
 #            available.extend(range(149, 166, 4))
-            if not channel in set:
+            if not channel in available:
                 settings['channel'] = '1'
             else:
                 # Channel set correctly, nothing to do
@@ -747,16 +751,20 @@ def is_valid_range(range_from='', range_to=''):
                 acceptable_range = False
                 # Not the same /24 subnet (i.e. the first 3 octets are different)
             else:
-                if max(int(ip_from) - int(ip_to)+1) > 5:
-                    # Sufficient range space, do nothing, other than notify
-                    # you the reader
-                    pass
-                else:
+                if int(ip_to) - int(ip_from)+1 < 5:
+                    # Insufficient range space 
                     acceptable_range = False
-        except:
+                else:
+                    # Acceptable range
+                    pass
+
+        except Exception as e:
             acceptable_range = False
+
     else:
         acceptable_range = False
+        print(acceptable_range)
+
     return acceptable_range
 
 
@@ -980,24 +988,12 @@ def update_ap(settings={}, wifiname='', verbose=False):
 
 # Example usage
 if __name__ == "__main__":
-    # mac_addresses = ["1A:2B:3C:4D:5E:6F", "1G:2H:3I:4J:5K:6L", "00:1A:2B:3C:4D:5E", "derp"]
-    # for mac in mac_addresses:
-    #    print(f"{mac}: {is_valid_mac_address(mac)}")
-#    test = ["Configuration_files/default.ini", "Configuration_files/extended.ini", "Configuration_files/standard1.ini", "Configuration_files/standard2.ini", "Configuration_files/minimal1.ini"]
-#    for file in test:
-#        config_settings = read_ini_config(file, False)
-#
-#        print("\x1b[33m[!]\x1b[0m")
-#        print(config_settings)
-#        print("\x1b[31m[!]\x1b[0m")
-#        print(config_settings)
+    pass
 
 
-    ip = find_usable_ip("10.10.10.100", "10.10.10.255")
-    print(ip)
-    print(retrieve_ip_from_conf(True))
-
-
+#    ip = find_usable_ip("10.10.10.100", "10.10.10.255")
+#    print(ip)
+#    print(retrieve_ip_from_conf(True))
 
 ############# supported .ini settings
 # 'ssid'          : str 

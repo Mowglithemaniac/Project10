@@ -1,0 +1,1875 @@
+Test test_files/test9b01.ini
+
+
+
+
+Test test_files/test9b02.ini
+
+
+
+
+Test test_files/test9b03.ini
+
+
+
+
+Test test_files/test9b04.ini
+
+
+
+
+Test test_files/test9b05.ini
+
+
+
+
+Test test_files/test9b06.ini
+
+
+
+
+Test test_files/test9b07.ini
+
+
+
+
+Test test_files/test9b08.ini
+
+
+
+
+Test test_files/test9b09.ini
+
+
+
+
+Test test_files/test9b10.ini
+
+
+
+
+Test test_files/test9b11.ini
+
+
+
+
+Test test_files/test9b12.ini
+
+
+
+
+Test test_files/test9b13.ini
+
+
+
+
+Test test_files/test9b14.ini
+
+
+
+
+Test test_files/test9b15.ini
+
+
+
+
+Test test_files/test9b16.ini
+
+
+
+
+Test test_files/test9b17.ini
+
+
+
+
+Test test_files/test9b18.ini
+
+
+
+
+Test test_files/test9b01.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+Unknown choice, starting over
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b02.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+REQUIRED: Choose a password:
+OPTIONAL: Choose a name for the AP (aka. ssid)
+          Using a randomized ssid: "The Verse Coverage"
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'The Verse Coverage'
+                      encryption  | 'wpa1'
+                      password    | 'password'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b03.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+REQUIRED: Choose a password:
+OPTIONAL: Choose a name for the AP (aka. ssid)
+          Using a randomized ssid: "Wolowitz Space Station"
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'Wolowitz Space Station'
+                      encryption  | 'wpa2'
+                      password    | 'password'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b04.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+Unknown choice, starting over
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b05.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b06.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+          Using a randomized ssid: "TrumpTower"
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'TrumpTower'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b07.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address accepted
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      mac_address | '00:1A:2B:3C:4D:5E'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [32m[+][0m [35msudo ip link set wlan0 address 00:1A:2B:3C:4D:5E[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [34m[?][0m MAC address for wlan0 changed to 00:1A:2B:3C:4D:5E.
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b08.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b09.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Valid range '10.10.10.10' to '10.10.10.255'
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.10'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.11/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b10.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Valid range '150.10.10.10' to '150.10.10.255'
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '150.10.10.10'
+                      range_to    | '150.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 150.10.10.11/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b11.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b12.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b13.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b14.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b15.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)    Channel accepted
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b16.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)    Channel accepted
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '7'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b17.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
+Test test_files/test9b18.txt
+
+
+[44mConfiguration tool[0m
+=========================
+[34mSystem status[0m
+[32m[+][0m Model           : Raspberry Pi 3 Model B Rev 1.2
+[32m[+][0m Date review     : Seems updated
+[32m[+][0m Requirements    : Installed
+[32m[+][0m Interface       : wlan0
+[32m[+][0m Interface       : eth0
+[34m[?][0m Checking access : wlan0
+                      Failed to access http://google.com via wlan0: 
+[34m[?][0m Checking access : eth0
+                      Failed to access http://google.com via eth0: 
+[34m[?][0m Persistence     : Not in place
+=========================
+[34mUser feedback[0m
+[34m[?][0m Date review     :     The date needs to be set in order to install
+    the necessary packages.
+    From the shell, use this command
+       [35msudo date -s "YYYY-MM-DD HH:MM:SS"[0m
+    This includes apostrophes, and remember to
+    substitue the correct: Year, Month, Date,
+    and Hours, Minutes, Seconds.
+    Preferably you should not use the root user
+    to execute commands.
+[34m[?][0m Persistence     : If persistence is desired, these files will be created
+                    - '/root/firewall.sh'
+                    - '/root/create_ap.sh'
+                    - '/etc/cron.d/ap_persistence'
+[34m[?][0m Missing packages: 0
+=========================
+[34mAccess point configuration[0m
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+Manually updating the Access Point
+Note: Only the encryption type is required.
+      Based on that some additional requirements may appear
+REQUIRED: Which encryption do you want? (none/wpa1/wpa2)
+OPTIONAL: Choose a name for the AP (aka. ssid)
+OPTIONAL: Select an ip range for the dhcp server
+          Enter the first IP of the range
+          Enter the last IP of the range
+    Invalid range, using default range of
+    10.10.10.100 to 10.10.10.255
+OPTIONAL: Select a channel to use (1-11)          Channel rejected, using default channel 1
+OPTIONAL: Choose a new mac address i.e. 00:1A:2B:3C:4D:5E    Mac address rejected
+=========================
+[34mAccess point activation[0m
+    Settings used   :
+                      ssid        | 'All Work No Play Network'
+                      encryption  | 'none'
+                      range_from  | '10.10.10.100'
+                      range_to    | '10.10.10.255'
+                      channel     | '1'
+    Settings omitted:
+                      mac_address | None
+                      password    | None
+                      persistence | None
+    [32m[+][0m [35msudo chattr -i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/dnsmasq.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/dnsmasq.conf[0m
+    [34m[?][0m Created file: [100m/etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/dnsmasq.conf[0m
+    [32m[+][0m [35msudo chattr -i /etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr -e /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Deleted file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo chattr +i /etc/hostapd/hostapd.conf[0m
+    [34m[?][0m Created file: [100m/etc/hostapd/hostapd.conf[0m
+    [32m[+][0m [35msudo iptables -F[0m
+    [32m[+][0m [35msudo iptables -P INPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P OUTPUT DROP[0m
+    [32m[+][0m [35msudo iptables -P FORWARD DROP[0m
+    [32m[+][0m [35msudo iptables -A INPUT -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -i wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A OUTPUT -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo iptables -A FORWARD -o wlan0 -j ACCEPT[0m
+    [32m[+][0m [35msudo airmon-ng check kill[0m
+    [32m[+][0m [35msudo ip link set wlan0 down[0m
+    [31m[!][0m [35msudo ip addr add 10.10.10.102/24 dev wlan0[0m
+    [32m[+][0m [35msudo ip link set wlan0 up[0m
+    [32m[+][0m [35msudo systemctl unmask hostapd[0m
+    [32m[+][0m [35msudo systemctl unmask dnsmasq[0m
+    [32m[+][0m [35msudo systemctl restart hostapd[0m
+    [32m[+][0m [35msudo systemctl restart dnsmasq[0m
+Successfully setup an AP
+=========================
+[34m[?][0m Manual configuration
+    0. Terminate this program
+    1. Tear down AP and restore connectivity
+    2. Disable persistence
+    3. Create persistence
+    4. Set up an Access Point
+
+Make your choice (0/1/2/3/4):
+
+
