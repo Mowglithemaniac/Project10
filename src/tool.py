@@ -93,8 +93,8 @@ if __name__ == "__main__":
         exit(1)
 
     if os.geteuid() != 0:
-        print(os.geteuid())
-        print("    \x1b[41mPlease rerun this progam using root priveleges\x1b[0m\n")
+#        print(os.geteuid())
+        print("    \x1b[41mPlease rerun this progam using root privileges\x1b[0m\n")
         exit(1)
 
 ####################################

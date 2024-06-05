@@ -64,9 +64,11 @@ cd /home/$USER/Project10
 ```
 Run the program with the following options as needed:
 
-- `-v`: Enable verbose output for detailed logging.
-- `-i input_file`: Specify an `.ini` configuration file to customize the AP settings.
-- `-y`: Automatically accept all prompts (useful for non-interactive setups).
+| Operator | Description
+|:---|:---|
+| `-v`           | Enable verbose output for detailed logging. |
+| `-i input_file`| Specify an `.ini` configuration file to customize the AP settings. |
+| `-y`           | Automatically accept all prompts (useful for non-interactive setups). |
 
 ### Example Command
 

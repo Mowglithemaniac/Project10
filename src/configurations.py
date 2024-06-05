@@ -12,7 +12,7 @@ Helper functions needed by logic.py
 - safe_lock(filename='', verbose=False)
 - safe_delete(filename='', verbose=False)
 ######### 
-+ is_valid_mac_address(mac)
++ is_valid_mac_address(mac, verbose=False)
 - change_mac(interface='', new_mac='', verbose=False)
 #########ini file
 + ini_exist(file_path="")
@@ -85,15 +85,17 @@ def safe_delete(filename='', verbose=''):
 
 ######### MAC addresse
 
-def is_valid_mac_address(mac):
+def is_valid_mac_address(mac, verbose = False):
     '''
     Purpose:
         Check if the provided string is a valid MAC address
+        and ensure it is a globally unique unicast address (LSB = 0)
     Return:
         Boolean, whether true or false
     '''
-    if mac == None:
+    if mac is None:
         return False
+    
     # Regular expression for validating a MAC address
     pattern = re.compile(r"""
     ^                           # start of string
@@ -102,7 +104,21 @@ def is_valid_mac_address(mac):
     $                           # end of string
     """, re.VERBOSE)
     
-    return pattern.match(mac) is not None    
+    if pattern.match(mac) is None:
+        return False
+    
+    # Extract the first byte and convert it to an integer
+    first_byte = int(mac.split(mac[2])[0], 16)
+    
+    # Check if the least significant bit is 1 of the first byte
+    # Should be 0 for valid MAC address
+    if first_byte & 0b00000001 == 1:
+        if verbose:
+            print(" "*4+"\x1b[5;34;41m[!]\x1b[0m Invalid MAC because LSB of 1st byte is set to 1")
+        return False
+    else:
+        return True
+    
 
 
 def change_mac(interface='', new_mac='', verbose=False):
@@ -118,7 +134,7 @@ def change_mac(interface='', new_mac='', verbose=False):
     if new_mac == None:
         return False
     returncode = 0
-    if not is_valid_mac_address(new_mac):
+    if not is_valid_mac_address(new_mac, verbose):
         return False
 
     commands = [
@@ -333,7 +349,7 @@ def ini_populate(settings = {}, verbose = False):
 
     # Review mac address
     if settings['mac_address'] != None:
-        if not is_valid_mac_address(settings['mac_address']):
+        if not is_valid_mac_address(settings['mac_address'], verbose):
             settings['mac_address'] = None
             if verbose:
                 print(" "*22+"The supplied mac address from the .ini file")
@@ -541,7 +557,7 @@ def persistence_create(ip='',wifiname = [], mac_address='', verbose = False):
     os.chmod(filename, 0o500)  # Make the script executable by the owner only
     safe_lock(filename, verbose)
 
-    # Step 1b, /root/reset_ap.sh
+    # Step 1b, /root/create_ap.sh
     ## If file exist, delete it
     filename = '/root/create_ap.sh'
     safe_delete(filename, verbose)
@@ -558,7 +574,7 @@ def persistence_create(ip='',wifiname = [], mac_address='', verbose = False):
             file.write("sudo systemctl mask wpa_supplicant\n")
             file.write("sudo systemctl restart hostapd\n")
             file.write("sudo systemctl restart dnsmasq\n")
-            if is_valid_mac_address(mac_address):
+            if is_valid_mac_address(mac_address, verbose):
                 file.write("sudo ip link set "+wifiname+" down\n")
                 file.write("sudo ip link set "+wifiname+" address "+ mac_address+"\n")
                 file.write("sudo ip link set "+wifiname+" up\n")
@@ -829,12 +845,11 @@ def find_usable_ip(range_from ='', range_to='', verbose=False):
         return None
 
 
-def update_dnsmasq(settings = {}, wifiname='', verbose=False):
+def update_dnsmasq(settings = {}, wifiname='', verbose=False, filename='/etc/dnsmasq.conf'):
     '''
     Purpose
         Update the /etc/dnsmasq.conf file 
     '''
-    filename = '/etc/dnsmasq.conf'
     if not safe_delete(filename, verbose):
         return False
 
@@ -864,12 +879,11 @@ def update_dnsmasq(settings = {}, wifiname='', verbose=False):
     return True
 
 
-def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
+def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False, filename = '/etc/hostapd/hostapd.conf'):
     '''
     Purpose
         Update the /etc/hostapd/hostapd.conf file 
     '''
-    filename = '/etc/hostapd/hostapd.conf'
     if not safe_delete(filename, verbose):
         return False
     try:
@@ -909,7 +923,7 @@ def update_hostapd(settings = {}, wifiname = '', ap_type='', verbose=False):
                 file.write('wpa=2\n')
                 file.write('wpa_key_mgmt=WPA-PSK\n')
                 file.write('wpa_pairwise=CCMP\n')
-                file.write('wpa_passphrase=YourPassphrase\n')
+                file.write(f"wpa_passphrase={settings['password']}\n")
             else:
                 #This is where ap expansions would be
                 print("Something went wrong\nIf the code ever executes this line, terminating program")
